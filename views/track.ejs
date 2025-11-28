@@ -1,19 +1,64 @@
 <%- include('partials/header') %>
 
-<section class="section">
+<section class="form-section track-section">
   <div class="container">
-    <h2 class="section-title">Track Your Application</h2>
-    <p class="section-subtitle">Check the status of your membership application</p>
-
-    <div class="form-container">
-      <p style="text-align: center; color: var(--text-secondary); margin-bottom: 2rem;">
-        This feature is coming soon. For now, please check your email for updates on your application status.
-      </p>
-      
-      <div style="text-align: center;">
-        <p style="margin-bottom: 1rem;">Need help?</p>
-        <a href="mailto:club@datascience.uiu.ac.bd" class="btn btn-primary">Contact Us</a>
+    <div class="card track-card">
+      <div class="form-header">
+        <h1>Track <span class="text-gradient">Application</span></h1>
+        <p>Check the status of your membership application</p>
       </div>
+      
+      <form action="/track" method="POST">
+        <div class="form-group">
+          <label class="form-label" for="email">Email Address</label>
+          <input type="email" id="email" name="email" class="form-input" placeholder="Enter the email you used to apply" required value="<%= typeof email !== 'undefined' ? email : '' %>">
+        </div>
+        
+        <button type="submit" class="btn btn-primary form-submit">
+          <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>
+          Check Status
+        </button>
+      </form>
+      
+      <% if (typeof member !== 'undefined' && member) { %>
+      <div class="track-result <%= member.status %>">
+        <div class="track-status <%= member.status %>">
+          <% if (member.status === 'pending') { %>
+          ⏳ Pending Review
+          <% } else if (member.status === 'approved') { %>
+          ✓ Approved
+          <% } else { %>
+          ✗ Rejected
+          <% } %>
+        </div>
+        <div style="color: var(--light-muted); font-size: 0.95rem;">
+          <p><strong style="color: var(--light);">Name:</strong> <%= member.name %></p>
+          <p><strong style="color: var(--light);">Student ID:</strong> <%= member.studentId %></p>
+          <p><strong style="color: var(--light);">Department:</strong> <%= member.department %></p>
+          <p><strong style="color: var(--light);">Applied:</strong> <%= new Date(member.createdAt).toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' }) %></p>
+        </div>
+        
+        <% if (member.status === 'pending') { %>
+        <p style="margin-top: 1rem; padding: 1rem; background: rgba(251, 191, 36, 0.1); border-radius: var(--radius-md); font-size: 0.9rem; color: var(--light-muted);">
+          Your application is being reviewed by our team. We'll contact you via email once a decision is made.
+        </p>
+        <% } else if (member.status === 'approved') { %>
+        <p style="margin-top: 1rem; padding: 1rem; background: rgba(16, 185, 129, 0.1); border-radius: var(--radius-md); font-size: 0.9rem; color: var(--light-muted);">
+          🎉 Congratulations! You're now a member of UIU Data Science Club. Check your email for next steps.
+        </p>
+        <% } %>
+      </div>
+      <% } else if (typeof notFound !== 'undefined' && notFound) { %>
+      <div style="margin-top: 2rem; padding: 1.5rem; background: rgba(239, 68, 68, 0.1); border: 1px solid rgba(239, 68, 68, 0.3); border-radius: var(--radius-lg); text-align: center;">
+        <p style="color: #f87171; margin-bottom: 0.5rem;">No application found</p>
+        <p style="color: var(--light-muted); font-size: 0.9rem;">We couldn't find an application with that email address.</p>
+        <a href="/join" class="btn btn-primary" style="margin-top: 1rem;">Apply Now</a>
+      </div>
+      <% } %>
+      
+      <p style="text-align: center; margin-top: 2rem; font-size: 0.9rem; color: var(--light-dim);">
+        Haven't applied yet? <a href="/join" style="color: var(--primary-light); font-weight: 500;">Join now</a>
+      </p>
     </div>
   </div>
 </section>

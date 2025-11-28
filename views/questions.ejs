@@ -1,46 +1,49 @@
 <%- include('partials/header') %>
 
-<section class="section">
+<section class="page-header">
   <div class="container">
-    <h2 class="section-title">Questions Bank</h2>
-    <p class="section-subtitle">Access past exam questions and study materials organized by department</p>
-
-    <% if (Object.keys(groupedQuestions).length > 0) { %>
-      <% Object.keys(groupedQuestions).forEach(category => { %>
-        <div class="questions-category">
-          <h3 class="questions-category-title"><%= category %></h3>
-          
-          <% Object.keys(groupedQuestions[category]).forEach(subcategory => { %>
-            <div class="questions-subcategory">
-              <h4 class="questions-subcategory-title"><%= subcategory %></h4>
-              <div class="question-list">
-                <% groupedQuestions[category][subcategory].forEach(question => { %>
-                  <a href="<%= question.link %>" target="_blank" class="question-item">
-                    <span class="question-title"><%= question.title %></span>
-                    <span class="question-link">View →</span>
-                  </a>
-                <% }); %>
-              </div>
-            </div>
-          <% }); %>
-        </div>
-      <% }); %>
-    <% } else { %>
-      <div class="no-events">
-        <div class="no-events-icon">📚</div>
-        <h3>Questions Bank Coming Soon</h3>
-        <p>We're currently collecting and organizing study materials. Check back soon!</p>
-      </div>
-    <% } %>
+    <h1>Questions <span class="text-gradient">Bank</span></h1>
+    <p>Practice and prepare with our curated collection of data science questions</p>
   </div>
 </section>
 
-<section class="section" style="background: var(--bg-white);">
+<section class="section questions-section">
   <div class="container">
-    <div class="partnership-card" style="text-align: center;">
-      <h2>Contribute to Questions Bank</h2>
-      <p>Have exam questions or study materials to share? Help your fellow students by contributing to our questions bank.</p>
-      <a href="mailto:club@datascience.uiu.ac.bd" class="btn btn-secondary" style="font-size: 1.125rem; padding: 1rem 2rem;">Submit Materials</a>
+    <% if (questions && questions.length > 0) { %>
+    <div class="questions-grid">
+      <% questions.forEach((question, index) => { %>
+      <div class="card question-card fade-in stagger-<%= (index % 6) + 1 %>">
+        <span class="question-category"><%= question.category %></span>
+        <h3 class="question-title"><%= question.title %></h3>
+        <p class="question-answer"><%= question.answer %></p>
+        <% if (question.difficulty) { %>
+        <div style="margin-top: 1rem;">
+          <span style="
+            display: inline-block;
+            padding: 0.25rem 0.75rem;
+            border-radius: var(--radius-full);
+            font-size: 0.75rem;
+            font-weight: 500;
+            background: <%= question.difficulty === 'Easy' ? 'rgba(16, 185, 129, 0.15)' : question.difficulty === 'Medium' ? 'rgba(251, 191, 36, 0.15)' : 'rgba(239, 68, 68, 0.15)' %>;
+            color: <%= question.difficulty === 'Easy' ? '#34d399' : question.difficulty === 'Medium' ? '#fbbf24' : '#f87171' %>;
+          "><%= question.difficulty %></span>
+        </div>
+        <% } %>
+      </div>
+      <% }); %>
+    </div>
+    <% } else { %>
+    <div class="empty-state">
+      <div class="empty-state-icon">❓</div>
+      <h3>Questions Coming Soon</h3>
+      <p>We're preparing a comprehensive question bank for you. Check back soon!</p>
+    </div>
+    <% } %>
+    
+    <div style="text-align: center; margin-top: 4rem; padding: 3rem; background: rgba(236, 72, 153, 0.1); border-radius: var(--radius-xl); border: 1px solid rgba(236, 72, 153, 0.2);">
+      <h3 style="margin-bottom: 1rem;">Have a Question to Contribute?</h3>
+      <p style="color: var(--light-muted); max-width: 500px; margin: 0 auto 1.5rem;">Help grow our question bank by submitting interesting data science questions and their solutions.</p>
+      <a href="mailto:club@datascience.uiu.ac.bd" class="btn btn-primary">Submit a Question</a>
     </div>
   </div>
 </section>

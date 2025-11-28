@@ -5,57 +5,48 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta name="description" content="UIU Data Science Club - Empowering students with data science skills through community, learning, and opportunities.">
   <title><%= title %> | UIU Data Science Club</title>
+  <!-- Modern fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Poppins:wght@600;700;800&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="/css/styles.css">
 </head>
 <body>
-  <header class="header">
+  <header class="header" id="header">
     <div class="container">
       <div class="header-content">
-        <!-- Weather Widget -->
+        <a href="/" class="logo">
+          <span class="logo-text">UIU DSC</span>
+        </a>
+        
+        <nav class="nav" id="mainNav">
+          <ul class="nav-list">
+            <li><a href="/" class="nav-link <%= title === 'Home' ? 'active' : '' %>">Home</a></li>
+            <li><a href="/events" class="nav-link <%= title === 'Events' ? 'active' : '' %>">Events</a></li>
+            <li><a href="/team" class="nav-link <%= title === 'Our Team' ? 'active' : '' %>">Team</a></li>
+            <li><a href="/partners" class="nav-link <%= title === 'Partners' ? 'active' : '' %>">Partners</a></li>
+            <li><a href="/questions" class="nav-link <%= title === 'Questions Bank' ? 'active' : '' %>">Questions</a></li>
+            <li><a href="/join" class="nav-link <%= title === 'Join Our Club' ? 'active' : '' %>">Join Us</a></li>
+          </ul>
+        </nav>
+
         <% if (title === 'Home') { %>
-        <div id="weatherWidget" class="weather-widget loading">
-          <div class="city-name">📍 Loading...</div>
+        <div id="weatherWidget" class="weather-widget">
+          <img id="weatherIcon" class="weather-icon" src="" alt="Weather">
           <div class="weather-info">
-            <div class="weather-icon">⏳</div>
-            <div class="weather-details">
-              <div class="temperature">--°C</div>
-              <div class="description">Loading...</div>
-            </div>
+            <span id="weatherTemp" class="weather-temp">--°C</span>
+            <span id="weatherDesc" class="weather-desc">Loading...</span>
           </div>
         </div>
         <% } else { %>
-        <div></div>
+        <a href="/join" class="btn btn-primary" style="padding: 0.625rem 1.5rem;">Join Now</a>
         <% } %>
-
-        <div class="logo">
-          <div>
-            <h1>UIU Data Science Club</h1>
-            <p class="logo-subtitle">Learn, Innovate & Lead in Data Science</p>
-          </div>
-        </div>
         
-        <button class="mobile-menu-toggle" onclick="toggleMenu()">☰</button>
-        
-        <nav class="nav" id="mainNav">
-          <a href="/" class="<%= title === 'Home' ? 'active' : '' %>">Home</a>
-          <a href="/events" class="<%= title === 'Events' ? 'active' : '' %>">Events</a>
-          <a href="/team" class="<%= title === 'Our Team' ? 'active' : '' %>">Team</a>
-          <a href="/partners" class="<%= title === 'Partners' ? 'active' : '' %>">Partners</a>
-          <a href="/questions" class="<%= title === 'Questions Bank' ? 'active' : '' %>">Questions</a>
-          <a href="/join" class="<%= title === 'Join Our Club' ? 'active' : '' %>">Join</a>
-        </nav>
+        <button class="menu-toggle" id="menuToggle" onclick="toggleMenu()">
+          <span></span>
+          <span></span>
+          <span></span>
+        </button>
       </div>
     </div>
   </header>
-
-  <% if (typeof showBanner === 'undefined' || showBanner !== false) { %>
-  <div class="banner">
-    <div class="container">
-      <div class="banner-content">
-        <span class="banner-icon">🎉</span>
-        <span>Fall 2025 Recruitment Now Open! • Opens November 18, 2025 • Closes November 19, 2025</span>
-        <a href="/join" class="btn btn-primary" style="padding: 0.5rem 1rem; font-size: 0.875rem;">Register Now</a>
-      </div>
-    </div>
-  </div>
-  <% } %>

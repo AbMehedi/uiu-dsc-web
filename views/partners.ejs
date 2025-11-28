@@ -1,47 +1,47 @@
 <%- include('partials/header') %>
 
-<section class="section">
+<section class="page-header">
   <div class="container">
-    <h2 class="section-title">Our Partners</h2>
-    <p class="section-subtitle">Organizations supporting our mission to promote data science education</p>
-
-    <% if (partners && partners.length > 0) { %>
-      <% partners.forEach(partner => { %>
-        <div class="partner-card">
-          <div class="partner-header">
-            <div class="partner-logo">
-              <%= partner.name.charAt(0).toUpperCase() %>
-            </div>
-            <div class="partner-info">
-              <h3><%= partner.name %></h3>
-              <% if (partner.websiteUrl) { %>
-                <a href="<%= partner.websiteUrl %>" target="_blank" style="color: var(--primary-color); font-weight: 600;">Visit Website →</a>
-              <% } %>
-            </div>
-          </div>
-          <p class="partner-description"><%= partner.description %></p>
-          <div class="partner-benefits">
-            <h4>🎁 Member Benefits</h4>
-            <p><%= partner.benefits %></p>
-          </div>
-        </div>
-      <% }); %>
-    <% } else { %>
-      <div class="no-events">
-        <div class="no-events-icon">🤝</div>
-        <h3>No Partners Yet</h3>
-        <p>We're actively seeking partnerships to provide more value to our members.</p>
-      </div>
-    <% } %>
+    <h1>Our <span class="text-gradient">Partners</span></h1>
+    <p>Organizations and companies supporting our mission</p>
   </div>
 </section>
 
-<section class="section" style="background: var(--bg-white);">
+<section class="section partners-section">
   <div class="container">
-    <div class="partnership-card" style="text-align: center;">
-      <h2>Become a Partner</h2>
-      <p>Interested in partnering with UIU Data Science Club? We'd love to hear from you!</p>
-      <a href="mailto:club@datascience.uiu.ac.bd" class="btn btn-secondary" style="font-size: 1.125rem; padding: 1rem 2rem;">Contact Us</a>
+    <% if (partners && partners.length > 0) { %>
+    <div class="partners-grid">
+      <% partners.forEach((partner, index) => { %>
+      <div class="card partner-card fade-in stagger-<%= (index % 6) + 1 %>">
+        <% if (partner.logo) { %>
+        <img src="<%= partner.logo %>" alt="<%= partner.name %>" class="partner-logo">
+        <% } else { %>
+        <div style="width: 80px; height: 80px; background: var(--gradient-primary); border-radius: var(--radius-lg); display: flex; align-items: center; justify-content: center; font-size: 2rem; margin-bottom: 1.5rem;">🤝</div>
+        <% } %>
+        <h3 class="partner-name"><%= partner.name %></h3>
+        <p class="partner-type"><%= partner.type %></p>
+        <p class="card-text" style="margin-top: 1rem; text-align: center;"><%= partner.description %></p>
+        <% if (partner.benefits) { %>
+        <p style="margin-top: 1rem; font-size: 0.85rem; color: var(--light-dim);"><strong style="color: var(--primary-light);">Benefits:</strong> <%= partner.benefits %></p>
+        <% } %>
+        <% if (partner.website) { %>
+        <a href="<%= partner.website %>" target="_blank" class="btn btn-secondary" style="margin-top: 1.5rem; padding: 0.625rem 1.25rem; font-size: 0.875rem;">Visit Website</a>
+        <% } %>
+      </div>
+      <% }); %>
+    </div>
+    <% } else { %>
+    <div class="empty-state">
+      <div class="empty-state-icon">🤝</div>
+      <h3>Partners Coming Soon</h3>
+      <p>We're working on exciting partnerships. Stay tuned!</p>
+    </div>
+    <% } %>
+    
+    <div style="text-align: center; margin-top: 4rem; padding: 3rem; background: var(--gradient-card); border-radius: var(--radius-xl); border: 1px solid rgba(99, 102, 241, 0.2);">
+      <h3 style="margin-bottom: 1rem;">Become a Partner</h3>
+      <p style="color: var(--light-muted); max-width: 500px; margin: 0 auto 1.5rem;">Interested in partnering with UIU Data Science Club? Let's create impactful opportunities together.</p>
+      <a href="mailto:club@datascience.uiu.ac.bd" class="btn btn-primary">Get in Touch</a>
     </div>
   </div>
 </section>

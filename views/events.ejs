@@ -1,60 +1,87 @@
 <%- include('partials/header') %>
 
-<section class="section">
+<section class="page-header">
   <div class="container">
-    <h2 class="section-title">Our Events</h2>
-    <p class="section-subtitle">Join us for workshops, seminars, and exciting activities</p>
+    <h1>Our <span class="text-gradient">Events</span></h1>
+    <p>Join us for workshops, seminars, and exciting activities throughout the year</p>
+  </div>
+</section>
 
+<section class="section events-section">
+  <div class="container">
     <% if (upcomingEvents && upcomingEvents.length > 0) { %>
-      <h3 style="font-size: 1.75rem; margin-bottom: 2rem; color: var(--primary-color);">Upcoming Events</h3>
-      <div class="event-list">
-        <% upcomingEvents.forEach(event => { %>
-          <div class="event-card">
-            <div class="event-image" style="background: linear-gradient(135deg, var(--primary-light), var(--secondary-color)); display: flex; align-items: center; justify-content: center; color: white; font-size: 3rem;">
-              📅
-            </div>
-            <div class="event-content">
-              <h3 class="event-title"><%= event.title %></h3>
-              <div class="event-meta">
-                <span class="event-meta-item">📅 <%= new Date(event.date).toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' }) %></span>
-                <span class="event-meta-item">🕒 <%= event.time %></span>
-                <span class="event-meta-item">📍 <%= event.location %></span>
-                <span class="event-meta-item">👥 <%= event.seats %> seats available</span>
-              </div>
-              <p class="event-description"><%= event.description %></p>
-            </div>
+    <div class="section-header" style="margin-bottom: 3rem;">
+      <span class="section-badge">Coming Soon</span>
+      <h2>Upcoming Events</h2>
+    </div>
+    
+    <div class="events-grid">
+      <% upcomingEvents.forEach((event, index) => { %>
+      <div class="card event-card fade-in stagger-<%= (index % 6) + 1 %>">
+        <span class="event-status upcoming">Upcoming</span>
+        <div style="background: var(--gradient-primary); height: 180px; display: flex; align-items: center; justify-content: center;">
+          <svg xmlns="http://www.w3.org/2000/svg" width="80" height="80" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1" stroke-linecap="round" stroke-linejoin="round" style="opacity: 0.4;"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect><line x1="16" y1="2" x2="16" y2="6"></line><line x1="8" y1="2" x2="8" y2="6"></line><line x1="3" y1="10" x2="21" y2="10"></line></svg>
+        </div>
+        <div class="card-content">
+          <div class="event-date">
+            <span class="event-date-day"><%= new Date(event.date).getDate() %></span>
+            <span class="event-date-month"><%= new Date(event.date).toLocaleString('en-US', { month: 'short' }) %></span>
           </div>
-        <% }); %>
+          <h3 class="card-title"><%= event.title %></h3>
+          <p class="card-text"><%= event.description %></p>
+          <div class="card-meta">
+            <span>🕒 <%= event.time %></span>
+            <span>📍 <%= event.location %></span>
+            <span>👥 <%= event.seats %> seats</span>
+          </div>
+        </div>
       </div>
+      <% }); %>
+    </div>
     <% } else { %>
-      <div class="no-events" style="margin-bottom: 3rem;">
-        <div class="no-events-icon">📅</div>
-        <h3>No Upcoming Events</h3>
-        <p>We're currently planning our next batch of exciting events. Check back soon!</p>
-      </div>
+    <div class="empty-state" style="margin-bottom: 4rem;">
+      <div class="empty-state-icon">📅</div>
+      <h3>No Upcoming Events</h3>
+      <p>We're currently planning our next batch of exciting events. Check back soon or follow us on social media!</p>
+      <a href="https://www.facebook.com/profile.php?id=61573382191627" target="_blank" class="btn btn-primary" style="margin-top: 1.5rem;">Follow for Updates</a>
+    </div>
     <% } %>
 
     <% if (pastEvents && pastEvents.length > 0) { %>
-      <h3 style="font-size: 1.75rem; margin: 3rem 0 2rem; color: var(--text-secondary);">Past Events</h3>
-      <div class="event-list">
-        <% pastEvents.forEach(event => { %>
-          <div class="event-card" style="opacity: 0.8;">
-            <div class="event-image" style="background: linear-gradient(135deg, #94a3b8, #64748b); display: flex; align-items: center; justify-content: center; color: white; font-size: 3rem;">
-              ✓
-            </div>
-            <div class="event-content">
-              <h3 class="event-title"><%= event.title %></h3>
-              <div class="event-meta">
-                <span class="event-meta-item">📅 <%= new Date(event.date).toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' }) %></span>
-                <span class="event-meta-item">🕒 <%= event.time %></span>
-                <span class="event-meta-item">📍 <%= event.location %></span>
-              </div>
-              <p class="event-description"><%= event.description %></p>
-            </div>
+    <div class="section-header" style="margin: 5rem 0 3rem;">
+      <span class="section-badge">Archive</span>
+      <h2>Past Events</h2>
+      <p>Take a look at what we've accomplished together</p>
+    </div>
+    
+    <div class="events-grid">
+      <% pastEvents.forEach((event, index) => { %>
+      <div class="card event-card fade-in stagger-<%= (index % 6) + 1 %>">
+        <span class="event-status completed">Completed</span>
+        <div style="background: linear-gradient(135deg, var(--dark-lighter), var(--dark)); height: 180px; display: flex; align-items: center; justify-content: center;">
+          <svg xmlns="http://www.w3.org/2000/svg" width="80" height="80" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1" stroke-linecap="round" stroke-linejoin="round" style="opacity: 0.3;"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path><polyline points="22 4 12 14.01 9 11.01"></polyline></svg>
+        </div>
+        <div class="card-content">
+          <div class="event-date" style="background: var(--dark-lighter);">
+            <span class="event-date-day"><%= new Date(event.date).getDate() %></span>
+            <span class="event-date-month"><%= new Date(event.date).toLocaleString('en-US', { month: 'short' }) %></span>
           </div>
-        <% }); %>
+          <h3 class="card-title"><%= event.title %></h3>
+          <p class="card-text"><%= event.description %></p>
+          <div class="card-meta">
+            <span>📅 <%= new Date(event.date).toLocaleDateString('en-US', { year: 'numeric', month: 'short', day: 'numeric' }) %></span>
+            <span>📍 <%= event.location %></span>
+          </div>
+        </div>
       </div>
+      <% }); %>
+    </div>
     <% } %>
+    
+    <div style="text-align: center; margin-top: 4rem; padding: 2rem; background: rgba(99, 102, 241, 0.1); border-radius: var(--radius-xl); border: 1px solid rgba(99, 102, 241, 0.2);">
+      <p style="color: var(--light); margin-bottom: 0.5rem;">Want to suggest an event or collaborate?</p>
+      <a href="mailto:club@datascience.uiu.ac.bd" style="color: var(--primary-light); font-weight: 600;">club@datascience.uiu.ac.bd</a>
+    </div>
   </div>
 </section>
 

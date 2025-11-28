@@ -1,114 +1,183 @@
 <%- include('partials/header') %>
 
+<!-- Hero Section -->
 <section class="hero">
+  <div class="hero-particles">
+    <% for(let i = 0; i < 20; i++) { %>
+    <div class="particle" style="left: <%= Math.random() * 100 %>%; animation-delay: <%= Math.random() * 15 %>s; animation-duration: <%= 10 + Math.random() * 10 %>s;"></div>
+    <% } %>
+  </div>
+  
   <div class="container">
-    <h2>Empowering Students with Data Science Skills</h2>
-    <p>Fostering innovation and building a community of future data leaders</p>
-    <div class="hero-buttons">
-      <a href="/events" class="btn btn-primary">View Events</a>
-      <a href="/team" class="btn btn-secondary">Meet Our Team</a>
+    <div class="hero-content">
+      <div class="hero-text">
+        <span class="hero-badge">UIU Data Science Club</span>
+        <h1>Empowering Students with <span class="text-gradient">Data Science</span> Skills</h1>
+        <p>Join our vibrant community to learn practical data techniques, build real-world projects, collaborate with peers, and connect with industry partners.</p>
+        <div class="hero-buttons">
+          <a href="/join" class="btn btn-primary">
+            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"></path><circle cx="9" cy="7" r="4"></circle><line x1="19" y1="8" x2="19" y2="14"></line><line x1="22" y1="11" x2="16" y2="11"></line></svg>
+            Join Us Today
+          </a>
+          <a href="/events" class="btn btn-secondary">
+            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect><line x1="16" y1="2" x2="16" y2="6"></line><line x1="8" y1="2" x2="8" y2="6"></line><line x1="3" y1="10" x2="21" y2="10"></line></svg>
+            View Events
+          </a>
+        </div>
+      </div>
+      
+      <div class="hero-visual">
+        <div class="hero-image-wrapper">
+          <img src="/images/dsc-hero.webp" alt="Data Science Visualization" class="hero-image">
+        </div>
+      </div>
+    </div>
+    
+    <div class="hero-stats">
+      <div class="stat-item fade-in">
+        <div class="stat-value">500+</div>
+        <div class="stat-label">Active Members</div>
+      </div>
+      <div class="stat-item fade-in stagger-1">
+        <div class="stat-value">50+</div>
+        <div class="stat-label">Events Hosted</div>
+      </div>
+      <div class="stat-item fade-in stagger-2">
+        <div class="stat-value">20+</div>
+        <div class="stat-label">Industry Partners</div>
+      </div>
     </div>
   </div>
 </section>
-
-<!-- Partnership Section -->
-<% if (partners && partners.length > 0) { %>
-  <% partners.slice(0, 1).forEach(partner => { %>
-    <section class="section" style="background: var(--bg-white);">
-      <div class="container">
-        <div class="partnership-card">
-          <div class="partnership-badge">Official Partnership • Just Announced</div>
-          <h3><%= partner.name %></h3>
-          <p><%= partner.description %></p>
-          <p><strong>Exclusive Benefits:</strong> <%= partner.benefits %></p>
-          <a href="/partners" class="btn btn-secondary">Learn More</a>
-        </div>
-      </div>
-    </section>
-  <% }); %>
-<% } %>
 
 <!-- About Section -->
-<section class="section">
+<section class="section events-section">
   <div class="container">
-    <h2 class="section-title">About Our Club</h2>
-    <p class="section-subtitle">The UIU Data Science Club is dedicated to promoting data science education, research, and applications among students at United International University.</p>
+    <div class="section-header">
+      <span class="section-badge">About Us</span>
+      <h2>What We <span class="text-gradient">Offer</span></h2>
+      <p>The UIU Data Science Club is dedicated to promoting data science education, research, and applications among students.</p>
+    </div>
     
-    <div class="cards">
-      <div class="card">
-        <div class="card-icon">👥</div>
-        <h3 class="card-title">Community</h3>
-        <p class="card-text">Join a vibrant community of data enthusiasts, share knowledge, and collaborate on exciting projects.</p>
+    <div class="events-grid">
+      <div class="card fade-in">
+        <div class="card-content" style="padding: 2.5rem;">
+          <div style="width: 60px; height: 60px; background: var(--gradient-primary); border-radius: var(--radius-lg); display: flex; align-items: center; justify-content: center; font-size: 1.75rem; margin-bottom: 1.5rem;">👥</div>
+          <h3 class="card-title">Community</h3>
+          <p class="card-text">Join a vibrant community of data enthusiasts, share knowledge, and collaborate on exciting projects with like-minded peers.</p>
+        </div>
       </div>
-      <div class="card">
-        <div class="card-icon">📚</div>
-        <h3 class="card-title">Learning</h3>
-        <p class="card-text">Access workshops, seminars, and hands-on training sessions led by industry experts and faculty members.</p>
+      
+      <div class="card fade-in stagger-1">
+        <div class="card-content" style="padding: 2.5rem;">
+          <div style="width: 60px; height: 60px; background: var(--gradient-primary); border-radius: var(--radius-lg); display: flex; align-items: center; justify-content: center; font-size: 1.75rem; margin-bottom: 1.5rem;">📚</div>
+          <h3 class="card-title">Learning</h3>
+          <p class="card-text">Access workshops, seminars, and hands-on training sessions led by industry experts and experienced faculty members.</p>
+        </div>
       </div>
-      <div class="card">
-        <div class="card-icon">🚀</div>
-        <h3 class="card-title">Opportunities</h3>
-        <p class="card-text">Participate in competitions, hackathons, and research projects to enhance your skills and portfolio.</p>
+      
+      <div class="card fade-in stagger-2">
+        <div class="card-content" style="padding: 2.5rem;">
+          <div style="width: 60px; height: 60px; background: var(--gradient-primary); border-radius: var(--radius-lg); display: flex; align-items: center; justify-content: center; font-size: 1.75rem; margin-bottom: 1.5rem;">🚀</div>
+          <h3 class="card-title">Opportunities</h3>
+          <p class="card-text">Participate in competitions, hackathons, and research projects to enhance your skills and build an impressive portfolio.</p>
+        </div>
       </div>
     </div>
   </div>
 </section>
 
-<!-- Upcoming Events Section -->
-<section class="section" style="background: var(--bg-white);">
+<!-- Featured Partner -->
+<% if (partners && partners.length > 0) { %>
+<section class="section" style="background: var(--dark-lighter);">
   <div class="container">
-    <h2 class="section-title">Upcoming Events</h2>
-    <p class="section-subtitle">Join us for our exciting events and activities throughout the semester</p>
+    <div class="section-header">
+      <span class="section-badge">Featured Partner</span>
+      <h2>Industry <span class="text-gradient">Collaboration</span></h2>
+    </div>
+    
+    <% partners.slice(0, 1).forEach(partner => { %>
+    <div class="card" style="max-width: 800px; margin: 0 auto;">
+      <div class="card-content" style="padding: 3rem; text-align: center;">
+        <div style="display: inline-block; padding: 0.5rem 1rem; background: rgba(16, 185, 129, 0.15); border-radius: var(--radius-full); font-size: 0.85rem; font-weight: 500; color: #34d399; margin-bottom: 1.5rem;">Official Partnership • Just Announced</div>
+        <h3 style="font-size: 1.75rem; margin-bottom: 1rem;"><%= partner.name %></h3>
+        <p class="card-text" style="max-width: 600px; margin: 0 auto 1.5rem;"><%= partner.description %></p>
+        <p style="color: var(--light-muted); margin-bottom: 1.5rem;"><strong style="color: var(--light);">Exclusive Benefits:</strong> <%= partner.benefits %></p>
+        <a href="/partners" class="btn btn-primary">Learn More</a>
+      </div>
+    </div>
+    <% }); %>
+  </div>
+</section>
+<% } %>
+
+<!-- Upcoming Events Section -->
+<section class="section events-section">
+  <div class="container">
+    <div class="section-header">
+      <span class="section-badge">What's Next</span>
+      <h2>Upcoming <span class="text-gradient">Events</span></h2>
+      <p>Join us for our exciting events and activities throughout the semester</p>
+    </div>
     
     <% if (upcomingEvents && upcomingEvents.length > 0) { %>
-      <div class="event-list">
-        <% upcomingEvents.slice(0, 3).forEach(event => { %>
-          <div class="event-card">
-            <div class="event-image" style="background: linear-gradient(135deg, var(--primary-light), var(--secondary-color)); display: flex; align-items: center; justify-content: center; color: white; font-size: 3rem;">
-              📅
-            </div>
-            <div class="event-content">
-              <h3 class="event-title"><%= event.title %></h3>
-              <div class="event-meta">
-                <span class="event-meta-item">📅 <%= new Date(event.date).toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' }) %></span>
-                <span class="event-meta-item">🕒 <%= event.time %></span>
-                <span class="event-meta-item">📍 <%= event.location %></span>
-                <span class="event-meta-item">👥 <%= event.seats %> seats</span>
-              </div>
-              <p class="event-description"><%= event.description %></p>
-            </div>
+    <div class="events-grid">
+      <% upcomingEvents.slice(0, 3).forEach((event, index) => { %>
+      <div class="card event-card fade-in stagger-<%= index + 1 %>">
+        <span class="event-status upcoming">Upcoming</span>
+        <div style="background: var(--gradient-primary); height: 160px; display: flex; align-items: center; justify-content: center;">
+          <svg xmlns="http://www.w3.org/2000/svg" width="64" height="64" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1" stroke-linecap="round" stroke-linejoin="round" style="opacity: 0.5;"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect><line x1="16" y1="2" x2="16" y2="6"></line><line x1="8" y1="2" x2="8" y2="6"></line><line x1="3" y1="10" x2="21" y2="10"></line></svg>
+        </div>
+        <div class="card-content">
+          <div class="event-date">
+            <span class="event-date-day"><%= new Date(event.date).getDate() %></span>
+            <span class="event-date-month"><%= new Date(event.date).toLocaleString('en-US', { month: 'short' }) %></span>
           </div>
-        <% }); %>
-      </div>
-      <div style="text-align: center; margin-top: 2rem;">
-        <a href="/events" class="btn btn-outline">View All Events</a>
-      </div>
-    <% } else { %>
-      <div class="no-events">
-        <div class="no-events-icon">📅</div>
-        <h3>No Upcoming Events</h3>
-        <p>We're currently planning our next batch of exciting events. Check back soon or follow us on social media for announcements!</p>
-        <div style="margin-top: 2rem; display: flex; gap: 1rem; justify-content: center; flex-wrap: wrap;">
-          <a href="/events" class="btn btn-outline">View Past Events</a>
-          <a href="https://www.facebook.com/profile.php?id=61573382191627" target="_blank" class="btn btn-outline">Follow Updates</a>
+          <h3 class="card-title"><%= event.title %></h3>
+          <p class="card-text"><%= event.description.substring(0, 100) %>...</p>
+          <div class="card-meta">
+            <span>🕒 <%= event.time %></span>
+            <span>📍 <%= event.location %></span>
+          </div>
         </div>
       </div>
-    <% } %>
+      <% }); %>
+    </div>
     
-    <p style="text-align: center; margin-top: 2rem; color: var(--text-secondary);">
-      Want to suggest an event? Contact our team at 
-      <a href="mailto:club@datascience.uiu.ac.bd" style="color: var(--primary-color); font-weight: 600;">club@datascience.uiu.ac.bd</a>
-    </p>
+    <div style="text-align: center; margin-top: 3rem;">
+      <a href="/events" class="btn btn-secondary">View All Events</a>
+    </div>
+    <% } else { %>
+    <div class="empty-state">
+      <div class="empty-state-icon">📅</div>
+      <h3>No Upcoming Events</h3>
+      <p>We're currently planning our next batch of exciting events. Check back soon or follow us on social media!</p>
+      <div style="margin-top: 2rem; display: flex; gap: 1rem; justify-content: center; flex-wrap: wrap;">
+        <a href="/events" class="btn btn-secondary">View Past Events</a>
+        <a href="https://www.facebook.com/profile.php?id=61573382191627" target="_blank" class="btn btn-primary">Follow Updates</a>
+      </div>
+    </div>
+    <% } %>
   </div>
 </section>
 
-<!-- Join CTA Section -->
-<section class="section">
-  <div class="container">
-    <div class="partnership-card" style="text-align: center;">
-      <h2>Join Our Club Today</h2>
-      <p>Become a part of UIU Data Science Club and embark on an exciting journey into the world of data science.</p>
-      <a href="/join" class="btn btn-secondary" style="font-size: 1.125rem; padding: 1rem 2rem;">Register Now</a>
+<!-- CTA Section -->
+<section class="section" style="background: var(--gradient-hero); position: relative; overflow: hidden;">
+  <div style="position: absolute; inset: 0; background: radial-gradient(circle at 50% 50%, rgba(99, 102, 241, 0.3) 0%, transparent 50%); pointer-events: none;"></div>
+  <div class="container" style="position: relative; z-index: 1;">
+    <div style="text-align: center; max-width: 700px; margin: 0 auto;">
+      <h2 style="margin-bottom: 1rem;">Ready to Start Your <span class="text-gradient">Data Science</span> Journey?</h2>
+      <p style="font-size: 1.125rem; margin-bottom: 2rem;">Become a part of UIU Data Science Club and embark on an exciting journey into the world of data science.</p>
+      <div style="display: flex; gap: 1rem; justify-content: center; flex-wrap: wrap;">
+        <a href="/join" class="btn btn-primary" style="font-size: 1.125rem; padding: 1rem 2.5rem;">
+          <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"></path><circle cx="9" cy="7" r="4"></circle><line x1="19" y1="8" x2="19" y2="14"></line><line x1="22" y1="11" x2="16" y2="11"></line></svg>
+          Register Now
+        </a>
+        <a href="/track" class="btn btn-secondary" style="font-size: 1.125rem; padding: 1rem 2.5rem;">Track Application</a>
+      </div>
+      <p style="margin-top: 1.5rem; font-size: 0.9rem; color: var(--light-dim);">
+        <strong style="color: var(--light);">Next recruitment:</strong> Fall 2025 • Opens Nov 18 • Closes Nov 19
+      </p>
     </div>
   </div>
 </section>

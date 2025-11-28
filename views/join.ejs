@@ -1,100 +1,87 @@
 <%- include('partials/header') %>
 
-<section class="section">
+<section class="form-section">
   <div class="container">
-    <h2 class="section-title">Join UIU Data Science Club</h2>
-    <p class="section-subtitle">Become part of our growing community of data enthusiasts</p>
-
     <div class="form-container">
-      <% if (success) { %>
-        <div class="alert alert-success">
-          <strong>Success!</strong> Your application has been submitted. We'll contact you soon at your provided email address.
+      <div class="form-card">
+        <div class="form-header">
+          <h1>Join <span class="text-gradient">UIU DSC</span></h1>
+          <p>Become a member of our vibrant data science community</p>
         </div>
-      <% } %>
-
-      <% if (error) { %>
-        <div class="alert alert-error">
-          <strong>Error!</strong> <%= error %>
+        
+        <% if (typeof message !== 'undefined' && message) { %>
+        <div style="padding: 1rem; margin-bottom: 1.5rem; border-radius: var(--radius-md); background: <%= message.type === 'success' ? 'rgba(16, 185, 129, 0.15)' : 'rgba(239, 68, 68, 0.15)' %>; border: 1px solid <%= message.type === 'success' ? 'rgba(16, 185, 129, 0.3)' : 'rgba(239, 68, 68, 0.3)' %>; color: <%= message.type === 'success' ? '#34d399' : '#f87171' %>;">
+          <%= message.text %>
         </div>
-      <% } %>
-
-      <% if (!success) { %>
+        <% } %>
+        
         <form action="/join" method="POST">
           <div class="form-group">
-            <label for="name" class="form-label">Full Name <span class="form-required">*</span></label>
-            <input type="text" id="name" name="name" class="form-input" required placeholder="Enter your full name">
+            <label class="form-label" for="name">Full Name *</label>
+            <input type="text" id="name" name="name" class="form-input" placeholder="Enter your full name" required>
           </div>
-
+          
           <div class="form-group">
-            <label for="email" class="form-label">Email Address <span class="form-required">*</span></label>
-            <input type="email" id="email" name="email" class="form-input" required placeholder="your.email@example.com">
+            <label class="form-label" for="email">Email Address *</label>
+            <input type="email" id="email" name="email" class="form-input" placeholder="your.email@uiu.ac.bd" required>
           </div>
-
+          
           <div class="form-group">
-            <label for="studentId" class="form-label">Student ID <span class="form-required">*</span></label>
-            <input type="text" id="studentId" name="studentId" class="form-input" required placeholder="e.g., 011123456">
+            <label class="form-label" for="studentId">Student ID *</label>
+            <input type="text" id="studentId" name="studentId" class="form-input" placeholder="e.g., 011221234" required>
           </div>
-
+          
           <div class="form-group">
-            <label for="department" class="form-label">Department <span class="form-required">*</span></label>
+            <label class="form-label" for="department">Department *</label>
             <select id="department" name="department" class="form-select" required>
               <option value="">Select your department</option>
-              <option value="Computer Science & Engineering">Computer Science & Engineering</option>
-              <option value="Electrical & Electronic Engineering">Electrical & Electronic Engineering</option>
-              <option value="Civil Engineering">Civil Engineering</option>
-              <option value="Business Administration">Business Administration</option>
+              <option value="CSE">Computer Science & Engineering (CSE)</option>
+              <option value="EEE">Electrical & Electronic Engineering (EEE)</option>
+              <option value="BBA">Business Administration (BBA)</option>
               <option value="Economics">Economics</option>
               <option value="English">English</option>
-              <option value="Law">Law</option>
+              <option value="Civil">Civil Engineering</option>
+              <option value="Pharmacy">Pharmacy</option>
               <option value="Other">Other</option>
             </select>
           </div>
-
+          
           <div class="form-group">
-            <label for="semester" class="form-label">Current Semester <span class="form-required">*</span></label>
+            <label class="form-label" for="semester">Current Semester *</label>
             <select id="semester" name="semester" class="form-select" required>
               <option value="">Select your semester</option>
-              <option value="1st Semester">1st Semester</option>
-              <option value="2nd Semester">2nd Semester</option>
-              <option value="3rd Semester">3rd Semester</option>
-              <option value="4th Semester">4th Semester</option>
-              <option value="5th Semester">5th Semester</option>
-              <option value="6th Semester">6th Semester</option>
-              <option value="7th Semester">7th Semester</option>
-              <option value="8th Semester">8th Semester</option>
-              <option value="9th+ Semester">9th+ Semester</option>
+              <% for(let i = 1; i <= 12; i++) { %>
+              <option value="<%= i %>">Semester <%= i %></option>
+              <% } %>
             </select>
           </div>
-
+          
           <div class="form-group">
-            <label for="phone" class="form-label">Phone Number (Optional)</label>
+            <label class="form-label" for="phone">Phone Number</label>
             <input type="tel" id="phone" name="phone" class="form-input" placeholder="+880 1XXX-XXXXXX">
           </div>
-
-          <button type="submit" class="form-button">Submit Application</button>
+          
+          <div class="form-group">
+            <label class="form-label" for="interests">Areas of Interest</label>
+            <textarea id="interests" name="interests" class="form-textarea" placeholder="Tell us about your interests in data science (e.g., Machine Learning, Data Visualization, Big Data, etc.)"></textarea>
+          </div>
+          
+          <div class="form-group">
+            <label class="form-checkbox">
+              <input type="checkbox" name="terms" required>
+              <span class="form-checkbox-label">I agree to participate actively in club activities and follow the club guidelines *</span>
+            </label>
+          </div>
+          
+          <button type="submit" class="btn btn-primary form-submit">
+            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"></path><circle cx="9" cy="7" r="4"></circle><line x1="19" y1="8" x2="19" y2="14"></line><line x1="22" y1="11" x2="16" y2="11"></line></svg>
+            Submit Application
+          </button>
         </form>
-      <% } else { %>
-        <div style="text-align: center; margin-top: 2rem;">
-          <a href="/" class="btn btn-primary">Return to Home</a>
-        </div>
-      <% } %>
-    </div>
-
-    <div style="text-align: center; margin-top: 3rem; padding: 2rem; background: var(--bg-white); border-radius: 0.75rem; box-shadow: var(--shadow-sm);">
-      <h3 style="margin-bottom: 1rem; color: var(--text-primary);">What Happens Next?</h3>
-      <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 2rem; margin-top: 2rem;">
-        <div>
-          <div style="font-size: 2rem; margin-bottom: 0.5rem;">1️⃣</div>
-          <p style="color: var(--text-secondary);">We review your application</p>
-        </div>
-        <div>
-          <div style="font-size: 2rem; margin-bottom: 0.5rem;">2️⃣</div>
-          <p style="color: var(--text-secondary);">You receive a confirmation email</p>
-        </div>
-        <div>
-          <div style="font-size: 2rem; margin-bottom: 0.5rem;">3️⃣</div>
-          <p style="color: var(--text-secondary);">Welcome to UIU DSC!</p>
-        </div>
+        
+        <p style="text-align: center; margin-top: 1.5rem; font-size: 0.9rem; color: var(--light-dim);">
+          Already applied? <a href="/track" style="color: var(--primary-light); font-weight: 500;">Track your application</a>
+        </p>
       </div>
     </div>
   </div>
