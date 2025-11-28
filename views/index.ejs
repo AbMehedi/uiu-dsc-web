@@ -2,85 +2,145 @@
 
 <!-- Hero Section -->
 <section class="hero">
-  <div class="hero-particles">
-    <% for(let i = 0; i < 20; i++) { %>
-    <div class="particle" style="left: <%= Math.random() * 100 %>%; animation-delay: <%= Math.random() * 15 %>s; animation-duration: <%= 10 + Math.random() * 10 %>s;"></div>
-    <% } %>
-  </div>
-  
   <div class="container">
     <div class="hero-content">
-      <div class="hero-text">
-        <span class="hero-badge">UIU Data Science Club</span>
-        <h1>Empowering Students with <span class="text-gradient">Data Science</span> Skills</h1>
-        <p>Join our vibrant community to learn practical data techniques, build real-world projects, collaborate with peers, and connect with industry partners.</p>
-        <div class="hero-buttons">
-          <a href="/join" class="btn btn-primary">
-            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"></path><circle cx="9" cy="7" r="4"></circle><line x1="19" y1="8" x2="19" y2="14"></line><line x1="22" y1="11" x2="16" y2="11"></line></svg>
-            Join Us Today
-          </a>
-          <a href="/events" class="btn btn-secondary">
-            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect><line x1="16" y1="2" x2="16" y2="6"></line><line x1="8" y1="2" x2="8" y2="6"></line><line x1="3" y1="10" x2="21" y2="10"></line></svg>
-            View Events
-          </a>
+      <div class="hero-inner">
+        <div class="hero-details">
+          <span class="hero-pill">
+            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 12h18" /><path d="m8 7 4-4 4 4" /><path d="m16 17-4 4-4-4" /></svg>
+            UIU Data Science Club • Est. 2019
+          </span>
+          <h1>Modern learning hub for <span class="text-gradient">data innovators</span></h1>
+          <p>Hands-on tracks, peer-led mentorship, and partner-backed projects that help UIU students turn curiosity into measurable data impact.</p>
+
+          <ul class="hero-checklist">
+            <li>Weekly labs & clinics</li>
+            <li>Industry-grade projects</li>
+            <li>Career & research support</li>
+          </ul>
+
+          <div class="hero-actions">
+            <a href="/join" class="btn btn-primary">
+              <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"></path><circle cx="9" cy="7" r="4"></circle><line x1="19" y1="8" x2="19" y2="14"></line><line x1="22" y1="11" x2="16" y2="11"></line></svg>
+              Become a Member
+            </a>
+            <a href="/events" class="btn btn-ghost">
+              <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect><line x1="16" y1="2" x2="16" y2="6"></line><line x1="8" y1="2" x2="8" y2="6"></line><line x1="3" y1="10" x2="21" y2="10"></line></svg>
+              Browse Upcoming Events
+            </a>
+          </div>
+
+          <div class="hero-meta">
+            <div class="hero-meta-item">
+              <strong>500+</strong>
+              <span>Active community members</span>
+            </div>
+            <div class="hero-meta-item">
+              <strong>18</strong>
+              <span>Workshops every semester</span>
+            </div>
+            <div class="hero-meta-item">
+              <strong>12</strong>
+              <span>Faculty & industry mentors</span>
+            </div>
+          </div>
         </div>
-      </div>
-      
-      <div class="hero-visual">
-        <div class="hero-image-wrapper">
-          <img src="/images/dsc-hero.webp" alt="Data Science Visualization" class="hero-image">
+
+        <div class="hero-media">
+          <div class="hero-media-card">
+            <div class="hero-media-content">
+              <div>
+                <span class="hero-tag">Fall 2025 Recruitment</span>
+                <div class="hero-highlight">
+                  <strong>Applications open Nov 18</strong>
+                  <span>Interviews & onboarding close on Nov 19</span>
+                </div>
+              </div>
+
+              <div class="hero-media-grid">
+                <div class="hero-metric">
+                  <strong>48</strong>
+                  <span>Leadership seats</span>
+                </div>
+                <div class="hero-metric">
+                  <strong>120</strong>
+                  <span>Project fellows</span>
+                </div>
+              </div>
+
+              <div class="hero-highlight">
+                <strong>Weekly Office Hours</strong>
+                <span>Sun–Tue • 11 AM – 4 PM • DSC Collaboration Zone</span>
+              </div>
+
+              <a href="/track" class="btn btn-secondary btn-large hero-media-link">Track Application</a>
+            </div>
+          </div>
         </div>
       </div>
     </div>
-    
+
     <div class="hero-stats">
-      <div class="stat-item fade-in">
-        <div class="stat-value">500+</div>
-        <div class="stat-label">Active Members</div>
-      </div>
-      <div class="stat-item fade-in stagger-1">
+      <div class="stat-item">
         <div class="stat-value">50+</div>
-        <div class="stat-label">Events Hosted</div>
+        <div class="stat-label">Annual Hrs of Training</div>
       </div>
-      <div class="stat-item fade-in stagger-2">
+      <div class="stat-item">
         <div class="stat-value">20+</div>
         <div class="stat-label">Industry Partners</div>
+      </div>
+      <div class="stat-item">
+        <div class="stat-value">15</div>
+        <div class="stat-label">Student-Led Projects</div>
       </div>
     </div>
   </div>
 </section>
 
 <!-- About Section -->
-<section class="section events-section">
+<section class="section about-section">
   <div class="container">
-    <div class="section-header">
-      <span class="section-badge">About Us</span>
-      <h2>What We <span class="text-gradient">Offer</span></h2>
-      <p>The UIU Data Science Club is dedicated to promoting data science education, research, and applications among students.</p>
-    </div>
-    
-    <div class="events-grid">
-      <div class="card fade-in">
-        <div class="card-content" style="padding: 2.5rem;">
-          <div style="width: 60px; height: 60px; background: var(--gradient-primary); border-radius: var(--radius-lg); display: flex; align-items: center; justify-content: center; font-size: 1.75rem; margin-bottom: 1.5rem;">👥</div>
+    <div class="about-grid">
+      <div class="about-highlight">
+        <span class="section-badge">About UIU DSC</span>
+        <h2>We help UIU students turn data curiosity into impact</h2>
+        <p>The UIU Data Science Club promotes data literacy, research, and real-world application by pairing structured learning paths with collaborative projects backed by faculty mentors.</p>
+
+        <ul class="feature-list">
+          <li>Live clinics on Python, ML, AI, analytics, and storytelling</li>
+          <li>Industry collaboration for hackathons, case comps, and demos</li>
+          <li>Mentorship spanning research, internships, and career prep</li>
+        </ul>
+
+        <div class="about-meta">
+          <div class="meta-card">
+            <strong>4</strong>
+            <span>Specialized learning tracks</span>
+          </div>
+          <div class="meta-card">
+            <strong>25+</strong>
+            <span>Year-round community meetups</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="about-values">
+        <div class="value-card fade-in">
+          <div class="value-icon">👥</div>
           <h3 class="card-title">Community</h3>
-          <p class="card-text">Join a vibrant community of data enthusiasts, share knowledge, and collaborate on exciting projects with like-minded peers.</p>
+          <p class="card-text">Be part of a warm, inclusive group of data enthusiasts who share insights, resources, and accountability.</p>
         </div>
-      </div>
-      
-      <div class="card fade-in stagger-1">
-        <div class="card-content" style="padding: 2.5rem;">
-          <div style="width: 60px; height: 60px; background: var(--gradient-primary); border-radius: var(--radius-lg); display: flex; align-items: center; justify-content: center; font-size: 1.75rem; margin-bottom: 1.5rem;">📚</div>
+
+        <div class="value-card fade-in stagger-1">
+          <div class="value-icon">📚</div>
           <h3 class="card-title">Learning</h3>
-          <p class="card-text">Access workshops, seminars, and hands-on training sessions led by industry experts and experienced faculty members.</p>
+          <p class="card-text">Learn from workshops, faculty sessions, and alumni speakers covering foundations through advanced modeling.</p>
         </div>
-      </div>
-      
-      <div class="card fade-in stagger-2">
-        <div class="card-content" style="padding: 2.5rem;">
-          <div style="width: 60px; height: 60px; background: var(--gradient-primary); border-radius: var(--radius-lg); display: flex; align-items: center; justify-content: center; font-size: 1.75rem; margin-bottom: 1.5rem;">🚀</div>
+
+        <div class="value-card fade-in stagger-2">
+          <div class="value-icon">🚀</div>
           <h3 class="card-title">Opportunities</h3>
-          <p class="card-text">Participate in competitions, hackathons, and research projects to enhance your skills and build an impressive portfolio.</p>
+          <p class="card-text">Build case studies, publish research, and represent UIU at national competitions and partner showcases.</p>
         </div>
       </div>
     </div>
@@ -162,22 +222,19 @@
 </section>
 
 <!-- CTA Section -->
-<section class="section" style="background: var(--gradient-hero); position: relative; overflow: hidden;">
-  <div style="position: absolute; inset: 0; background: radial-gradient(circle at 50% 50%, rgba(99, 102, 241, 0.3) 0%, transparent 50%); pointer-events: none;"></div>
-  <div class="container" style="position: relative; z-index: 1;">
-    <div style="text-align: center; max-width: 700px; margin: 0 auto;">
-      <h2 style="margin-bottom: 1rem;">Ready to Start Your <span class="text-gradient">Data Science</span> Journey?</h2>
-      <p style="font-size: 1.125rem; margin-bottom: 2rem;">Become a part of UIU Data Science Club and embark on an exciting journey into the world of data science.</p>
-      <div style="display: flex; gap: 1rem; justify-content: center; flex-wrap: wrap;">
-        <a href="/join" class="btn btn-primary" style="font-size: 1.125rem; padding: 1rem 2.5rem;">
+<section class="section cta-section">
+  <div class="container">
+    <div class="cta-card">
+      <h2>Ready to start your <span class="text-gradient">data journey</span> with UIU DSC?</h2>
+      <p>Join a club that pairs modern curriculum with a caring community. Secure your spot in the next cohort or keep tabs on your submitted application.</p>
+      <div class="cta-actions">
+        <a href="/join" class="btn btn-primary btn-large">
           <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"></path><circle cx="9" cy="7" r="4"></circle><line x1="19" y1="8" x2="19" y2="14"></line><line x1="22" y1="11" x2="16" y2="11"></line></svg>
           Register Now
         </a>
-        <a href="/track" class="btn btn-secondary" style="font-size: 1.125rem; padding: 1rem 2.5rem;">Track Application</a>
+        <a href="/track" class="btn btn-secondary btn-large">Track Application</a>
       </div>
-      <p style="margin-top: 1.5rem; font-size: 0.9rem; color: var(--light-dim);">
-        <strong style="color: var(--light);">Next recruitment:</strong> Fall 2025 • Opens Nov 18 • Closes Nov 19
-      </p>
+      <p class="cta-note"><strong>Next recruitment:</strong> Fall 2025 • Opens Nov 18 • Closes Nov 19</p>
     </div>
   </div>
 </section>

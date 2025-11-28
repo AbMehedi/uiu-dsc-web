@@ -8,6 +8,7 @@ import {
   getAllPartners,
   getAllQuestions,
   addMember,
+  getMemberByEmail,
   closeDatabase
 } from './db';
 
@@ -67,20 +68,11 @@ app.get('/events', async (req: Request, res: Response) => {
 // Team page
 app.get('/team', async (req: Request, res: Response) => {
   try {
-    const teamMembers = await getAllTeamMembers();
-    
-    // Group by category
-    const groupedTeam: { [key: string]: any[] } = {};
-    teamMembers.forEach(member => {
-      if (!groupedTeam[member.category]) {
-        groupedTeam[member.category] = [];
-      }
-      groupedTeam[member.category].push(member);
-    });
+    const team = await getAllTeamMembers();
     
     res.render('team', {
       title: 'Our Team',
-      groupedTeam
+      team
     });
   } catch (error) {
     console.error('Error loading team page:', error);
@@ -108,21 +100,9 @@ app.get('/questions', async (req: Request, res: Response) => {
   try {
     const questions = await getAllQuestions();
     
-    // Group by category and subcategory
-    const groupedQuestions: { [key: string]: { [key: string]: any[] } } = {};
-    questions.forEach(question => {
-      if (!groupedQuestions[question.category]) {
-        groupedQuestions[question.category] = {};
-      }
-      if (!groupedQuestions[question.category][question.subcategory]) {
-        groupedQuestions[question.category][question.subcategory] = [];
-      }
-      groupedQuestions[question.category][question.subcategory].push(question);
-    });
-    
     res.render('questions', {
       title: 'Questions Bank',
-      groupedQuestions
+      questions
     });
   } catch (error) {
     console.error('Error loading questions page:', error);
@@ -134,47 +114,97 @@ app.get('/questions', async (req: Request, res: Response) => {
 app.get('/join', (req: Request, res: Response) => {
   res.render('join', {
     title: 'Join Our Club',
-    success: false,
-    error: null
+    message: null
   });
 });
 
 // Join page (POST)
 app.post('/join', async (req: Request, res: Response) => {
   try {
-    const { name, email, studentId, department, semester, phone } = req.body;
+    const { name, email, studentId, department, semester, phone, interests } = req.body;
     
     // Basic validation
     if (!name || !email || !studentId || !department || !semester) {
       return res.render('join', {
         title: 'Join Our Club',
-        success: false,
-        error: 'Please fill in all required fields'
+        message: { type: 'error', text: 'Please fill in all required fields' }
       });
     }
     
-    await addMember({ name, email, studentId, department, semester, phone });
+    // Check if email already exists
+    const existingMember = await getMemberByEmail(email);
+    if (existingMember) {
+      return res.render('join', {
+        title: 'Join Our Club',
+        message: { type: 'error', text: 'An application with this email already exists. Check your status on the Track page.' }
+      });
+    }
+    
+    await addMember({ name, email, studentId, department, semester, phone, interests });
     
     res.render('join', {
       title: 'Join Our Club',
-      success: true,
-      error: null
+      message: { type: 'success', text: 'Application submitted successfully! You can track your application status using your email.' }
     });
   } catch (error) {
     console.error('Error adding member:', error);
     res.render('join', {
       title: 'Join Our Club',
-      success: false,
-      error: 'An error occurred. Please try again.'
+      message: { type: 'error', text: 'An error occurred. Please try again.' }
     });
   }
 });
 
-// Track Application page (placeholder)
+// Track Application page (GET)
 app.get('/track', (req: Request, res: Response) => {
   res.render('track', {
-    title: 'Track Application'
+    title: 'Track Application',
+    email: '',
+    member: null,
+    notFound: false
   });
+});
+
+// Track Application page (POST)
+app.post('/track', async (req: Request, res: Response) => {
+  try {
+    const { email } = req.body;
+    
+    if (!email) {
+      return res.render('track', {
+        title: 'Track Application',
+        email: '',
+        member: null,
+        notFound: false
+      });
+    }
+    
+    const member = await getMemberByEmail(email);
+    
+    if (member) {
+      res.render('track', {
+        title: 'Track Application',
+        email,
+        member,
+        notFound: false
+      });
+    } else {
+      res.render('track', {
+        title: 'Track Application',
+        email,
+        member: null,
+        notFound: true
+      });
+    }
+  } catch (error) {
+    console.error('Error tracking application:', error);
+    res.render('track', {
+      title: 'Track Application',
+      email: req.body.email || '',
+      member: null,
+      notFound: true
+    });
+  }
 });
 
 // API endpoints

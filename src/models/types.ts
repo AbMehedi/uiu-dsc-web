@@ -45,5 +45,7 @@ export interface Member {
   department: string;
   semester: string;
   phone?: string;
-  joinedAt: string;
+  interests?: string;
+  status: 'pending' | 'approved' | 'rejected';
+  createdAt: string;
 }

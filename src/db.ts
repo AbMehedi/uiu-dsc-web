@@ -99,12 +99,14 @@ export async function initializeDatabase(): Promise<void> {
       CREATE TABLE IF NOT EXISTS members (
         id INTEGER PRIMARY KEY AUTOINCREMENT,
         name TEXT NOT NULL,
-        email TEXT NOT NULL,
+        email TEXT NOT NULL UNIQUE,
         studentId TEXT NOT NULL,
         department TEXT NOT NULL,
         semester TEXT NOT NULL,
         phone TEXT,
-        joinedAt TEXT NOT NULL
+        interests TEXT,
+        status TEXT DEFAULT 'pending',
+        createdAt TEXT NOT NULL
       )
     `);
 
@@ -245,14 +247,18 @@ export async function addQuestion(question: Omit<Question, 'id'>): Promise<void>
 
 // Member CRUD operations
 export async function getAllMembers(): Promise<Member[]> {
-  return getAllQuery<Member>('SELECT * FROM members ORDER BY joinedAt DESC');
+  return getAllQuery<Member>('SELECT * FROM members ORDER BY createdAt DESC');
 }
 
-export async function addMember(member: Omit<Member, 'id' | 'joinedAt'>): Promise<void> {
-  const joinedAt = new Date().toISOString();
+export async function getMemberByEmail(email: string): Promise<Member | undefined> {
+  return getQuery<Member>('SELECT * FROM members WHERE email = ?', [email]);
+}
+
+export async function addMember(member: Omit<Member, 'id' | 'createdAt' | 'status'>): Promise<void> {
+  const createdAt = new Date().toISOString();
   await runQuery(
-    'INSERT INTO members (name, email, studentId, department, semester, phone, joinedAt) VALUES (?, ?, ?, ?, ?, ?, ?)',
-    [member.name, member.email, member.studentId, member.department, member.semester, member.phone || null, joinedAt]
+    'INSERT INTO members (name, email, studentId, department, semester, phone, interests, status, createdAt) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)',
+    [member.name, member.email, member.studentId, member.department, member.semester, member.phone || null, member.interests || null, 'pending', createdAt]
   );
 }
 

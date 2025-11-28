@@ -3,35 +3,56 @@
 <section class="page-header">
   <div class="container">
     <h1>Questions <span class="text-gradient">Bank</span></h1>
-    <p>Practice and prepare with our curated collection of data science questions</p>
+    <p>Access organized question resources for your exams</p>
   </div>
 </section>
 
 <section class="section questions-section">
   <div class="container">
     <% if (questions && questions.length > 0) { %>
-    <div class="questions-grid">
-      <% questions.forEach((question, index) => { %>
-      <div class="card question-card fade-in stagger-<%= (index % 6) + 1 %>">
-        <span class="question-category"><%= question.category %></span>
-        <h3 class="question-title"><%= question.title %></h3>
-        <p class="question-answer"><%= question.answer %></p>
-        <% if (question.difficulty) { %>
-        <div style="margin-top: 1rem;">
-          <span style="
-            display: inline-block;
-            padding: 0.25rem 0.75rem;
-            border-radius: var(--radius-full);
-            font-size: 0.75rem;
-            font-weight: 500;
-            background: <%= question.difficulty === 'Easy' ? 'rgba(16, 185, 129, 0.15)' : question.difficulty === 'Medium' ? 'rgba(251, 191, 36, 0.15)' : 'rgba(239, 68, 68, 0.15)' %>;
-            color: <%= question.difficulty === 'Easy' ? '#34d399' : question.difficulty === 'Medium' ? '#fbbf24' : '#f87171' %>;
-          "><%= question.difficulty %></span>
+    <!-- Departmental Questions -->
+    <% const departmental = questions.filter(q => q.category === 'Departmental'); %>
+    <% if (departmental.length > 0) { %>
+    <div class="questions-category">
+      <h2 class="questions-category-title">📚 Departmental Questions</h2>
+      <div class="questions-list">
+        <% departmental.forEach((question) => { %>
+        <div class="question-item">
+          <div class="question-item-main">
+            <h3 class="question-item-title"><%= question.title %></h3>
+            <p class="question-item-meta"><%= question.subcategory %></p>
+          </div>
+          <a href="<%= question.link %>" target="_blank" rel="noopener" class="btn btn-primary btn-small">
+            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"></path><polyline points="15 3 21 3 21 9"></polyline><line x1="10" y1="14" x2="21" y2="3"></line></svg>
+            Open
+          </a>
         </div>
-        <% } %>
+        <% }); %>
       </div>
-      <% }); %>
     </div>
+    <% } %>
+
+    <!-- Non-Departmental Questions -->
+    <% const nonDepartmental = questions.filter(q => q.category !== 'Departmental'); %>
+    <% if (nonDepartmental.length > 0) { %>
+    <div class="questions-category">
+      <h2 class="questions-category-title">🎓 Non-Departmental Questions</h2>
+      <div class="questions-list">
+        <% nonDepartmental.forEach((question) => { %>
+        <div class="question-item">
+          <div class="question-item-main">
+            <h3 class="question-item-title"><%= question.title %></h3>
+            <p class="question-item-meta"><%= question.subcategory %></p>
+          </div>
+          <a href="<%= question.link %>" target="_blank" rel="noopener" class="btn btn-primary btn-small">
+            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"></path><polyline points="15 3 21 3 21 9"></polyline><line x1="10" y1="14" x2="21" y2="3"></line></svg>
+            Open
+          </a>
+        </div>
+        <% }); %>
+      </div>
+    </div>
+    <% } %>
     <% } else { %>
     <div class="empty-state">
       <div class="empty-state-icon">❓</div>
@@ -40,9 +61,9 @@
     </div>
     <% } %>
     
-    <div style="text-align: center; margin-top: 4rem; padding: 3rem; background: rgba(236, 72, 153, 0.1); border-radius: var(--radius-xl); border: 1px solid rgba(236, 72, 153, 0.2);">
-      <h3 style="margin-bottom: 1rem;">Have a Question to Contribute?</h3>
-      <p style="color: var(--light-muted); max-width: 500px; margin: 0 auto 1.5rem;">Help grow our question bank by submitting interesting data science questions and their solutions.</p>
+    <div class="questions-contribute">
+      <h3>Have questions to contribute?</h3>
+      <p>Help grow our question bank by submitting resources.</p>
       <a href="mailto:club@datascience.uiu.ac.bd" class="btn btn-primary">Submit a Question</a>
     </div>
   </div>
