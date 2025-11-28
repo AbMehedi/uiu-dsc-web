@@ -11,13 +11,31 @@
   <header class="header">
     <div class="container">
       <div class="header-content">
+        <!-- Weather Widget -->
+        <% if (title === 'Home') { %>
+        <div id="weatherWidget" class="weather-widget loading">
+          <div class="city-name">📍 Loading...</div>
+          <div class="weather-info">
+            <div class="weather-icon">⏳</div>
+            <div class="weather-details">
+              <div class="temperature">--°C</div>
+              <div class="description">Loading...</div>
+            </div>
+          </div>
+        </div>
+        <% } else { %>
+        <div></div>
+        <% } %>
+
         <div class="logo">
           <div>
             <h1>UIU Data Science Club</h1>
             <p class="logo-subtitle">Learn, Innovate & Lead in Data Science</p>
           </div>
         </div>
+        
         <button class="mobile-menu-toggle" onclick="toggleMenu()">☰</button>
+        
         <nav class="nav" id="mainNav">
           <a href="/" class="<%= title === 'Home' ? 'active' : '' %>">Home</a>
           <a href="/events" class="<%= title === 'Events' ? 'active' : '' %>">Events</a>

@@ -85,3 +85,83 @@ window.addEventListener('resize', () => {
     }
   }, 250);
 });
+
+// Weather Widget for Dhaka
+async function loadWeather() {
+  const API_KEY = 'b8090ef2545baef94323412356b50050';
+  const CITY = 'Dhaka';
+  const API_URL = `https://api.openweathermap.org/data/2.5/weather?q=${CITY},BD&appid=${API_KEY}&units=metric`;
+
+  try {
+    const response = await fetch(API_URL);
+    const data = await response.json();
+
+    if (data.cod === 200) {
+      updateWeatherWidget(data);
+    } else {
+      console.error('Weather data error:', data.message);
+    }
+  } catch (error) {
+    console.error('Failed to fetch weather:', error);
+  }
+}
+
+function updateWeatherWidget(data) {
+  const widget = document.getElementById('weatherWidget');
+  if (!widget) return;
+
+  const temp = Math.round(data.main.temp);
+  const description = data.weather[0].description;
+  const humidity = data.main.humidity;
+  const windSpeed = Math.round(data.wind.speed * 3.6); // Convert m/s to km/h
+  const icon = getWeatherIcon(data.weather[0].main);
+
+  widget.innerHTML = `
+    <div class="city-name">
+      📍 ${data.name}
+    </div>
+    <div class="weather-info">
+      <div class="weather-icon">${icon}</div>
+      <div class="weather-details">
+        <div class="temperature">${temp}°C</div>
+        <div class="description">${description}</div>
+      </div>
+    </div>
+    <div class="extra-info">
+      <span>💧 ${humidity}%</span>
+      <span>💨 ${windSpeed} km/h</span>
+    </div>
+  `;
+
+  widget.classList.remove('loading');
+}
+
+function getWeatherIcon(condition) {
+  const icons = {
+    'Clear': '☀️',
+    'Clouds': '☁️',
+    'Rain': '🌧️',
+    'Drizzle': '🌦️',
+    'Thunderstorm': '⛈️',
+    'Snow': '❄️',
+    'Mist': '🌫️',
+    'Smoke': '🌫️',
+    'Haze': '🌫️',
+    'Dust': '🌫️',
+    'Fog': '🌫️',
+    'Sand': '🌫️',
+    'Ash': '🌫️',
+    'Squall': '💨',
+    'Tornado': '🌪️'
+  };
+  return icons[condition] || '🌤️';
+}
+
+// Load weather on page load
+if (window.location.pathname === '/') {
+  document.addEventListener('DOMContentLoaded', () => {
+    loadWeather();
+    // Refresh weather every 10 minutes
+    setInterval(loadWeather, 600000);
+  });
+}
