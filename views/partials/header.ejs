@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="UIU Data Science Club - Empowering students with data science skills through community, learning, and opportunities.">
+  <title><%= title %> | UIU Data Science Club</title>
+  <link rel="stylesheet" href="/css/styles.css">
+</head>
+<body>
+  <header class="header">
+    <div class="container">
+      <div class="header-content">
+        <div class="logo">
+          <div>
+            <h1>UIU Data Science Club</h1>
+            <p class="logo-subtitle">Learn, Innovate & Lead in Data Science</p>
+          </div>
+        </div>
+        <button class="mobile-menu-toggle" onclick="toggleMenu()">☰</button>
+        <nav class="nav" id="mainNav">
+          <a href="/" class="<%= title === 'Home' ? 'active' : '' %>">Home</a>
+          <a href="/events" class="<%= title === 'Events' ? 'active' : '' %>">Events</a>
+          <a href="/team" class="<%= title === 'Our Team' ? 'active' : '' %>">Team</a>
+          <a href="/partners" class="<%= title === 'Partners' ? 'active' : '' %>">Partners</a>
+          <a href="/questions" class="<%= title === 'Questions Bank' ? 'active' : '' %>">Questions</a>
+          <a href="/join" class="<%= title === 'Join Our Club' ? 'active' : '' %>">Join</a>
+        </nav>
+      </div>
+    </div>
+  </header>
+
+  <% if (typeof showBanner === 'undefined' || showBanner !== false) { %>
+  <div class="banner">
+    <div class="container">
+      <div class="banner-content">
+        <span class="banner-icon">🎉</span>
+        <span>Fall 2025 Recruitment Now Open! • Opens November 18, 2025 • Closes November 19, 2025</span>
+        <a href="/join" class="btn btn-primary" style="padding: 0.5rem 1rem; font-size: 0.875rem;">Register Now</a>
+      </div>
+    </div>
+  </div>
+  <% } %>

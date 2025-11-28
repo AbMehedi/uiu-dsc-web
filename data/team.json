@@ -1,0 +1,58 @@
+[
+  {
+    "name": "Dr. Ahmed Rahman",
+    "role": "Faculty Advisor",
+    "category": "Advisor",
+    "email": "ahmed.rahman@uiu.ac.bd",
+    "imageUrl": "/images/team-advisor.jpg"
+  },
+  {
+    "name": "Fahim Ahmed",
+    "role": "President",
+    "category": "Executive Committee",
+    "email": "president@datascience.uiu.ac.bd",
+    "imageUrl": "/images/team-president.jpg"
+  },
+  {
+    "name": "Tasnim Hossain",
+    "role": "Vice President",
+    "category": "Executive Committee",
+    "email": "vp@datascience.uiu.ac.bd",
+    "imageUrl": "/images/team-vp.jpg"
+  },
+  {
+    "name": "Rafid Mahmud",
+    "role": "General Secretary",
+    "category": "Executive Committee",
+    "email": "secretary@datascience.uiu.ac.bd",
+    "imageUrl": "/images/team-secretary.jpg"
+  },
+  {
+    "name": "Nusrat Jahan",
+    "role": "Treasurer",
+    "category": "Executive Committee",
+    "email": "treasurer@datascience.uiu.ac.bd",
+    "imageUrl": "/images/team-treasurer.jpg"
+  },
+  {
+    "name": "Samiul Islam",
+    "role": "Event Coordinator",
+    "category": "Coordinators",
+    "email": "events@datascience.uiu.ac.bd",
+    "imageUrl": "/images/team-events.jpg"
+  },
+  {
+    "name": "Ayesha Khan",
+    "role": "Workshop Coordinator",
+    "category": "Coordinators",
+    "email": "workshops@datascience.uiu.ac.bd",
+    "imageUrl": "/images/team-workshops.jpg"
+  },
+  {
+    "name": "Tanvir Hassan",
+    "role": "Technical Lead",
+    "category": "Coordinators",
+    "email": "tech@datascience.uiu.ac.bd",
+    "imageUrl": "/images/team-tech.jpg"
+  }
+]

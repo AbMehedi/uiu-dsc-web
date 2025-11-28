@@ -1,0 +1,48 @@
+<%- include('partials/header') %>
+
+<section class="section">
+  <div class="container">
+    <h2 class="section-title">Questions Bank</h2>
+    <p class="section-subtitle">Access past exam questions and study materials organized by department</p>
+
+    <% if (Object.keys(groupedQuestions).length > 0) { %>
+      <% Object.keys(groupedQuestions).forEach(category => { %>
+        <div class="questions-category">
+          <h3 class="questions-category-title"><%= category %></h3>
+          
+          <% Object.keys(groupedQuestions[category]).forEach(subcategory => { %>
+            <div class="questions-subcategory">
+              <h4 class="questions-subcategory-title"><%= subcategory %></h4>
+              <div class="question-list">
+                <% groupedQuestions[category][subcategory].forEach(question => { %>
+                  <a href="<%= question.link %>" target="_blank" class="question-item">
+                    <span class="question-title"><%= question.title %></span>
+                    <span class="question-link">View →</span>
+                  </a>
+                <% }); %>
+              </div>
+            </div>
+          <% }); %>
+        </div>
+      <% }); %>
+    <% } else { %>
+      <div class="no-events">
+        <div class="no-events-icon">📚</div>
+        <h3>Questions Bank Coming Soon</h3>
+        <p>We're currently collecting and organizing study materials. Check back soon!</p>
+      </div>
+    <% } %>
+  </div>
+</section>
+
+<section class="section" style="background: var(--bg-white);">
+  <div class="container">
+    <div class="partnership-card" style="text-align: center;">
+      <h2>Contribute to Questions Bank</h2>
+      <p>Have exam questions or study materials to share? Help your fellow students by contributing to our questions bank.</p>
+      <a href="mailto:club@datascience.uiu.ac.bd" class="btn btn-secondary" style="font-size: 1.125rem; padding: 1rem 2rem;">Submit Materials</a>
+    </div>
+  </div>
+</section>
+
+<%- include('partials/footer') %>

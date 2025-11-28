@@ -1,0 +1,29 @@
+[
+  {
+    "title": "Data Science Workshop - Python Fundamentals",
+    "date": "2025-12-15",
+    "time": "14:00",
+    "location": "Room 301, UIU Campus",
+    "seats": 50,
+    "description": "Learn the fundamentals of Python programming for data science. Covers NumPy, Pandas, and data visualization basics.",
+    "imageUrl": "/images/event-python.jpg"
+  },
+  {
+    "title": "Machine Learning Bootcamp",
+    "date": "2025-12-20",
+    "time": "10:00",
+    "location": "Computer Lab 2, UIU",
+    "seats": 40,
+    "description": "Hands-on workshop covering supervised and unsupervised learning algorithms, model evaluation, and practical applications.",
+    "imageUrl": "/images/event-ml.jpg"
+  },
+  {
+    "title": "DataCamp Partnership Kickoff Event",
+    "date": "2025-11-28",
+    "time": "16:00",
+    "location": "Auditorium, UIU",
+    "seats": 100,
+    "description": "Celebrate our new partnership with DataCamp! Learn how to access your free 1-year subscription with 350+ courses.",
+    "imageUrl": "/images/event-datacamp.jpg"
+  }
+]

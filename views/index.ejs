@@ -1,0 +1,116 @@
+<%- include('partials/header') %>
+
+<section class="hero">
+  <div class="container">
+    <h2>Empowering Students with Data Science Skills</h2>
+    <p>Fostering innovation and building a community of future data leaders</p>
+    <div class="hero-buttons">
+      <a href="/events" class="btn btn-primary">View Events</a>
+      <a href="/team" class="btn btn-secondary">Meet Our Team</a>
+    </div>
+  </div>
+</section>
+
+<!-- Partnership Section -->
+<% if (partners && partners.length > 0) { %>
+  <% partners.slice(0, 1).forEach(partner => { %>
+    <section class="section" style="background: var(--bg-white);">
+      <div class="container">
+        <div class="partnership-card">
+          <div class="partnership-badge">Official Partnership • Just Announced</div>
+          <h3><%= partner.name %></h3>
+          <p><%= partner.description %></p>
+          <p><strong>Exclusive Benefits:</strong> <%= partner.benefits %></p>
+          <a href="/partners" class="btn btn-secondary">Learn More</a>
+        </div>
+      </div>
+    </section>
+  <% }); %>
+<% } %>
+
+<!-- About Section -->
+<section class="section">
+  <div class="container">
+    <h2 class="section-title">About Our Club</h2>
+    <p class="section-subtitle">The UIU Data Science Club is dedicated to promoting data science education, research, and applications among students at United International University.</p>
+    
+    <div class="cards">
+      <div class="card">
+        <div class="card-icon">👥</div>
+        <h3 class="card-title">Community</h3>
+        <p class="card-text">Join a vibrant community of data enthusiasts, share knowledge, and collaborate on exciting projects.</p>
+      </div>
+      <div class="card">
+        <div class="card-icon">📚</div>
+        <h3 class="card-title">Learning</h3>
+        <p class="card-text">Access workshops, seminars, and hands-on training sessions led by industry experts and faculty members.</p>
+      </div>
+      <div class="card">
+        <div class="card-icon">🚀</div>
+        <h3 class="card-title">Opportunities</h3>
+        <p class="card-text">Participate in competitions, hackathons, and research projects to enhance your skills and portfolio.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Upcoming Events Section -->
+<section class="section" style="background: var(--bg-white);">
+  <div class="container">
+    <h2 class="section-title">Upcoming Events</h2>
+    <p class="section-subtitle">Join us for our exciting events and activities throughout the semester</p>
+    
+    <% if (upcomingEvents && upcomingEvents.length > 0) { %>
+      <div class="event-list">
+        <% upcomingEvents.slice(0, 3).forEach(event => { %>
+          <div class="event-card">
+            <div class="event-image" style="background: linear-gradient(135deg, var(--primary-light), var(--secondary-color)); display: flex; align-items: center; justify-content: center; color: white; font-size: 3rem;">
+              📅
+            </div>
+            <div class="event-content">
+              <h3 class="event-title"><%= event.title %></h3>
+              <div class="event-meta">
+                <span class="event-meta-item">📅 <%= new Date(event.date).toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' }) %></span>
+                <span class="event-meta-item">🕒 <%= event.time %></span>
+                <span class="event-meta-item">📍 <%= event.location %></span>
+                <span class="event-meta-item">👥 <%= event.seats %> seats</span>
+              </div>
+              <p class="event-description"><%= event.description %></p>
+            </div>
+          </div>
+        <% }); %>
+      </div>
+      <div style="text-align: center; margin-top: 2rem;">
+        <a href="/events" class="btn btn-outline">View All Events</a>
+      </div>
+    <% } else { %>
+      <div class="no-events">
+        <div class="no-events-icon">📅</div>
+        <h3>No Upcoming Events</h3>
+        <p>We're currently planning our next batch of exciting events. Check back soon or follow us on social media for announcements!</p>
+        <div style="margin-top: 2rem; display: flex; gap: 1rem; justify-content: center; flex-wrap: wrap;">
+          <a href="/events" class="btn btn-outline">View Past Events</a>
+          <a href="https://www.facebook.com/profile.php?id=61573382191627" target="_blank" class="btn btn-outline">Follow Updates</a>
+        </div>
+      </div>
+    <% } %>
+    
+    <p style="text-align: center; margin-top: 2rem; color: var(--text-secondary);">
+      Want to suggest an event? Contact our team at 
+      <a href="mailto:club@datascience.uiu.ac.bd" style="color: var(--primary-color); font-weight: 600;">club@datascience.uiu.ac.bd</a>
+    </p>
+  </div>
+</section>
+
+<!-- Join CTA Section -->
+<section class="section">
+  <div class="container">
+    <div class="partnership-card" style="text-align: center;">
+      <h2>Join Our Club Today</h2>
+      <p>Become a part of UIU Data Science Club and embark on an exciting journey into the world of data science.</p>
+      <a href="/join" class="btn btn-secondary" style="font-size: 1.125rem; padding: 1rem 2rem;">Register Now</a>
+    </div>
+  </div>
+</section>
+
+<%- include('partials/footer') %>

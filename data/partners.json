@@ -1,0 +1,16 @@
+[
+  {
+    "name": "DataCamp Donates",
+    "description": "DataCamp is the world's leading platform for data science education, offering 350+ courses on Python, SQL, R, and Machine Learning.",
+    "benefits": "Get a FREE 1-year DataCamp subscription exclusively for UIU DSC members. Access interactive courses, hands-on projects, and skill assessments to boost your data science skills.",
+    "logoUrl": "/images/partner-datacamp.png",
+    "websiteUrl": "https://www.datacamp.com"
+  },
+  {
+    "name": "United International University",
+    "description": "UIU is a leading private university in Bangladesh committed to excellence in education and research.",
+    "benefits": "Official university support including venue access, faculty mentorship, and institutional resources for club activities.",
+    "logoUrl": "/images/partner-uiu.png",
+    "websiteUrl": "https://www.uiu.ac.bd"
+  }
+]

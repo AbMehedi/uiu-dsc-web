@@ -1,0 +1,103 @@
+<%- include('partials/header') %>
+
+<section class="section">
+  <div class="container">
+    <h2 class="section-title">Join UIU Data Science Club</h2>
+    <p class="section-subtitle">Become part of our growing community of data enthusiasts</p>
+
+    <div class="form-container">
+      <% if (success) { %>
+        <div class="alert alert-success">
+          <strong>Success!</strong> Your application has been submitted. We'll contact you soon at your provided email address.
+        </div>
+      <% } %>
+
+      <% if (error) { %>
+        <div class="alert alert-error">
+          <strong>Error!</strong> <%= error %>
+        </div>
+      <% } %>
+
+      <% if (!success) { %>
+        <form action="/join" method="POST">
+          <div class="form-group">
+            <label for="name" class="form-label">Full Name <span class="form-required">*</span></label>
+            <input type="text" id="name" name="name" class="form-input" required placeholder="Enter your full name">
+          </div>
+
+          <div class="form-group">
+            <label for="email" class="form-label">Email Address <span class="form-required">*</span></label>
+            <input type="email" id="email" name="email" class="form-input" required placeholder="your.email@example.com">
+          </div>
+
+          <div class="form-group">
+            <label for="studentId" class="form-label">Student ID <span class="form-required">*</span></label>
+            <input type="text" id="studentId" name="studentId" class="form-input" required placeholder="e.g., 011123456">
+          </div>
+
+          <div class="form-group">
+            <label for="department" class="form-label">Department <span class="form-required">*</span></label>
+            <select id="department" name="department" class="form-select" required>
+              <option value="">Select your department</option>
+              <option value="Computer Science & Engineering">Computer Science & Engineering</option>
+              <option value="Electrical & Electronic Engineering">Electrical & Electronic Engineering</option>
+              <option value="Civil Engineering">Civil Engineering</option>
+              <option value="Business Administration">Business Administration</option>
+              <option value="Economics">Economics</option>
+              <option value="English">English</option>
+              <option value="Law">Law</option>
+              <option value="Other">Other</option>
+            </select>
+          </div>
+
+          <div class="form-group">
+            <label for="semester" class="form-label">Current Semester <span class="form-required">*</span></label>
+            <select id="semester" name="semester" class="form-select" required>
+              <option value="">Select your semester</option>
+              <option value="1st Semester">1st Semester</option>
+              <option value="2nd Semester">2nd Semester</option>
+              <option value="3rd Semester">3rd Semester</option>
+              <option value="4th Semester">4th Semester</option>
+              <option value="5th Semester">5th Semester</option>
+              <option value="6th Semester">6th Semester</option>
+              <option value="7th Semester">7th Semester</option>
+              <option value="8th Semester">8th Semester</option>
+              <option value="9th+ Semester">9th+ Semester</option>
+            </select>
+          </div>
+
+          <div class="form-group">
+            <label for="phone" class="form-label">Phone Number (Optional)</label>
+            <input type="tel" id="phone" name="phone" class="form-input" placeholder="+880 1XXX-XXXXXX">
+          </div>
+
+          <button type="submit" class="form-button">Submit Application</button>
+        </form>
+      <% } else { %>
+        <div style="text-align: center; margin-top: 2rem;">
+          <a href="/" class="btn btn-primary">Return to Home</a>
+        </div>
+      <% } %>
+    </div>
+
+    <div style="text-align: center; margin-top: 3rem; padding: 2rem; background: var(--bg-white); border-radius: 0.75rem; box-shadow: var(--shadow-sm);">
+      <h3 style="margin-bottom: 1rem; color: var(--text-primary);">What Happens Next?</h3>
+      <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 2rem; margin-top: 2rem;">
+        <div>
+          <div style="font-size: 2rem; margin-bottom: 0.5rem;">1️⃣</div>
+          <p style="color: var(--text-secondary);">We review your application</p>
+        </div>
+        <div>
+          <div style="font-size: 2rem; margin-bottom: 0.5rem;">2️⃣</div>
+          <p style="color: var(--text-secondary);">You receive a confirmation email</p>
+        </div>
+        <div>
+          <div style="font-size: 2rem; margin-bottom: 0.5rem;">3️⃣</div>
+          <p style="color: var(--text-secondary);">Welcome to UIU DSC!</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<%- include('partials/footer') %>

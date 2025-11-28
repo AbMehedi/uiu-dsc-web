@@ -1,0 +1,28 @@
+{
+  "name": "uiu-dsc-clone",
+  "version": "1.0.0",
+  "description": "UIU Data Science Club Website Clone - Full-stack application with Node.js, TypeScript, Express, and SQLite",
+  "main": "dist/server.js",
+  "scripts": {
+    "build": "tsc",
+    "start": "node dist/server.js",
+    "dev": "tsc && node dist/server.js",
+    "clean": "rmdir /s /q dist 2>nul || echo Cleaned",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": ["data-science", "club", "uiu", "express", "typescript", "sqlite"],
+  "author": "UIU Data Science Club",
+  "license": "ISC",
+  "type": "commonjs",
+  "dependencies": {
+    "ejs": "^3.1.10",
+    "express": "^5.1.0",
+    "sqlite3": "^5.1.7"
+  },
+  "devDependencies": {
+    "@types/express": "^5.0.5",
+    "@types/node": "^24.10.1",
+    "@types/sqlite3": "^3.1.11",
+    "typescript": "^5.9.3"
+  }
+}

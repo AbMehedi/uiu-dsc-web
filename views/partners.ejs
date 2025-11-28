@@ -1,0 +1,49 @@
+<%- include('partials/header') %>
+
+<section class="section">
+  <div class="container">
+    <h2 class="section-title">Our Partners</h2>
+    <p class="section-subtitle">Organizations supporting our mission to promote data science education</p>
+
+    <% if (partners && partners.length > 0) { %>
+      <% partners.forEach(partner => { %>
+        <div class="partner-card">
+          <div class="partner-header">
+            <div class="partner-logo">
+              <%= partner.name.charAt(0).toUpperCase() %>
+            </div>
+            <div class="partner-info">
+              <h3><%= partner.name %></h3>
+              <% if (partner.websiteUrl) { %>
+                <a href="<%= partner.websiteUrl %>" target="_blank" style="color: var(--primary-color); font-weight: 600;">Visit Website →</a>
+              <% } %>
+            </div>
+          </div>
+          <p class="partner-description"><%= partner.description %></p>
+          <div class="partner-benefits">
+            <h4>🎁 Member Benefits</h4>
+            <p><%= partner.benefits %></p>
+          </div>
+        </div>
+      <% }); %>
+    <% } else { %>
+      <div class="no-events">
+        <div class="no-events-icon">🤝</div>
+        <h3>No Partners Yet</h3>
+        <p>We're actively seeking partnerships to provide more value to our members.</p>
+      </div>
+    <% } %>
+  </div>
+</section>
+
+<section class="section" style="background: var(--bg-white);">
+  <div class="container">
+    <div class="partnership-card" style="text-align: center;">
+      <h2>Become a Partner</h2>
+      <p>Interested in partnering with UIU Data Science Club? We'd love to hear from you!</p>
+      <a href="mailto:club@datascience.uiu.ac.bd" class="btn btn-secondary" style="font-size: 1.125rem; padding: 1rem 2rem;">Contact Us</a>
+    </div>
+  </div>
+</section>
+
+<%- include('partials/footer') %>
