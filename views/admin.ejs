@@ -1,0 +1,405 @@
+<%- include('partials/header') %>
+
+<section class="page-header">
+  <div class="container">
+    <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 1rem;">
+      <div>
+        <h1>Admin <span class="text-gradient">Panel</span></h1>
+        <p>Database management and overview</p>
+      </div>
+      <a href="/admin/logout" class="btn btn-secondary">
+        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"></path><polyline points="16 17 21 12 16 7"></polyline><line x1="21" y1="12" x2="9" y2="12"></line></svg>
+        Logout
+      </a>
+    </div>
+  </div>
+</section>
+
+<section class="section">
+  <div class="container">
+    <!-- Summary Cards -->
+    <div class="admin-summary">
+      <div class="summary-card">
+        <div class="summary-icon">📅</div>
+        <div class="summary-content">
+          <h3><%= events.length %></h3>
+          <p>Events</p>
+        </div>
+      </div>
+      <div class="summary-card">
+        <div class="summary-icon">👥</div>
+        <div class="summary-content">
+          <h3><%= team.length %></h3>
+          <p>Team Members</p>
+        </div>
+      </div>
+      <div class="summary-card">
+        <div class="summary-icon">🤝</div>
+        <div class="summary-content">
+          <h3><%= partners.length %></h3>
+          <p>Partners</p>
+        </div>
+      </div>
+      <div class="summary-card">
+        <div class="summary-icon">📚</div>
+        <div class="summary-content">
+          <h3><%= questions.length %></h3>
+          <p>Questions</p>
+        </div>
+      </div>
+      <div class="summary-card">
+        <div class="summary-icon">✉️</div>
+        <div class="summary-content">
+          <h3><%= members.length %></h3>
+          <p>Applications</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- Events Table -->
+    <div class="admin-section">
+      <h2 class="admin-section-title">📅 Events</h2>
+      <div class="table-wrapper">
+        <table class="admin-table">
+          <thead>
+            <tr>
+              <th>ID</th>
+              <th>Title</th>
+              <th>Date</th>
+              <th>Time</th>
+              <th>Location</th>
+              <th>Seats</th>
+            </tr>
+          </thead>
+          <tbody>
+            <% if (events.length > 0) { %>
+              <% events.forEach(event => { %>
+                <tr>
+                  <td><%= event.id %></td>
+                  <td><%= event.title %></td>
+                  <td><%= new Date(event.date).toLocaleDateString() %></td>
+                  <td><%= event.time %></td>
+                  <td><%= event.location %></td>
+                  <td><%= event.seats %></td>
+                </tr>
+              <% }); %>
+            <% } else { %>
+              <tr>
+                <td colspan="6" class="empty-cell">No events found</td>
+              </tr>
+            <% } %>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- Team Members Table -->
+    <div class="admin-section">
+      <h2 class="admin-section-title">👥 Team Members</h2>
+      <div class="table-wrapper">
+        <table class="admin-table">
+          <thead>
+            <tr>
+              <th>ID</th>
+              <th>Name</th>
+              <th>Role</th>
+              <th>Category</th>
+              <th>Email</th>
+            </tr>
+          </thead>
+          <tbody>
+            <% if (team.length > 0) { %>
+              <% team.forEach(member => { %>
+                <tr>
+                  <td><%= member.id %></td>
+                  <td><%= member.name %></td>
+                  <td><%= member.role %></td>
+                  <td><%= member.category %></td>
+                  <td><a href="mailto:<%= member.email %>"><%= member.email %></a></td>
+                </tr>
+              <% }); %>
+            <% } else { %>
+              <tr>
+                <td colspan="5" class="empty-cell">No team members found</td>
+              </tr>
+            <% } %>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- Partners Table -->
+    <div class="admin-section">
+      <h2 class="admin-section-title">🤝 Partners</h2>
+      <div class="table-wrapper">
+        <table class="admin-table">
+          <thead>
+            <tr>
+              <th>ID</th>
+              <th>Name</th>
+              <th>Description</th>
+              <th>Website</th>
+            </tr>
+          </thead>
+          <tbody>
+            <% if (partners.length > 0) { %>
+              <% partners.forEach(partner => { %>
+                <tr>
+                  <td><%= partner.id %></td>
+                  <td><%= partner.name %></td>
+                  <td><%= partner.description.substring(0, 80) %>...</td>
+                  <td>
+                    <% if (partner.websiteUrl) { %>
+                      <a href="<%= partner.websiteUrl %>" target="_blank">Visit</a>
+                    <% } else { %>
+                      -
+                    <% } %>
+                  </td>
+                </tr>
+              <% }); %>
+            <% } else { %>
+              <tr>
+                <td colspan="4" class="empty-cell">No partners found</td>
+              </tr>
+            <% } %>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- Questions Table -->
+    <div class="admin-section">
+      <h2 class="admin-section-title">📚 Questions Bank</h2>
+      <div class="table-wrapper">
+        <table class="admin-table">
+          <thead>
+            <tr>
+              <th>ID</th>
+              <th>Category</th>
+              <th>Subcategory</th>
+              <th>Title</th>
+              <th>Link</th>
+            </tr>
+          </thead>
+          <tbody>
+            <% if (questions.length > 0) { %>
+              <% questions.forEach(question => { %>
+                <tr>
+                  <td><%= question.id %></td>
+                  <td><%= question.category %></td>
+                  <td><%= question.subcategory %></td>
+                  <td><%= question.title %></td>
+                  <td><a href="<%= question.link %>" target="_blank">Open</a></td>
+                </tr>
+              <% }); %>
+            <% } else { %>
+              <tr>
+                <td colspan="5" class="empty-cell">No questions found</td>
+              </tr>
+            <% } %>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- Member Applications Table -->
+    <div class="admin-section">
+      <h2 class="admin-section-title">✉️ Member Applications</h2>
+      <div class="table-wrapper">
+        <table class="admin-table">
+          <thead>
+            <tr>
+              <th>ID</th>
+              <th>Name</th>
+              <th>Email</th>
+              <th>Student ID</th>
+              <th>Department</th>
+              <th>Semester</th>
+              <th>Status</th>
+              <th>Applied Date</th>
+            </tr>
+          </thead>
+          <tbody>
+            <% if (members.length > 0) { %>
+              <% members.forEach(member => { %>
+                <tr>
+                  <td><%= member.id %></td>
+                  <td><%= member.name %></td>
+                  <td><a href="mailto:<%= member.email %>"><%= member.email %></a></td>
+                  <td><%= member.studentId %></td>
+                  <td><%= member.department %></td>
+                  <td><%= member.semester %></td>
+                  <td>
+                    <span class="status-badge <%= member.status %>">
+                      <%= member.status %>
+                    </span>
+                  </td>
+                  <td><%= member.createdAt ? new Date(member.createdAt).toLocaleDateString() : 'N/A' %></td>
+                </tr>
+              <% }); %>
+            <% } else { %>
+              <tr>
+                <td colspan="8" class="empty-cell">No applications found</td>
+              </tr>
+            <% } %>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+</section>
+
+<style>
+.admin-summary {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+  gap: 1.5rem;
+  margin-bottom: 3rem;
+}
+
+.summary-card {
+  background: var(--surface);
+  border-radius: var(--radius-lg);
+  padding: 1.5rem;
+  border: 1px solid rgba(92, 45, 213, 0.1);
+  box-shadow: var(--shadow-soft);
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  transition: transform 0.2s ease;
+}
+
+.summary-card:hover {
+  transform: translateY(-4px);
+  box-shadow: var(--shadow-card);
+}
+
+.summary-icon {
+  font-size: 2.5rem;
+}
+
+.summary-content h3 {
+  font-size: 2rem;
+  color: var(--primary);
+  margin: 0;
+  font-family: var(--font-display);
+}
+
+.summary-content p {
+  margin: 0;
+  color: var(--text-muted);
+  font-size: 0.9rem;
+}
+
+.admin-section {
+  margin-bottom: 3rem;
+}
+
+.admin-section-title {
+  font-size: 1.5rem;
+  font-family: var(--font-display);
+  margin-bottom: 1rem;
+  padding-bottom: 0.75rem;
+  border-bottom: 2px solid rgba(92, 45, 213, 0.15);
+}
+
+.table-wrapper {
+  overflow-x: auto;
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-soft);
+}
+
+.admin-table {
+  width: 100%;
+  border-collapse: collapse;
+  background: var(--surface);
+  font-size: 0.95rem;
+}
+
+.admin-table thead {
+  background: var(--primary);
+  color: white;
+}
+
+.admin-table th {
+  padding: 1rem;
+  text-align: left;
+  font-weight: 600;
+  white-space: nowrap;
+}
+
+.admin-table td {
+  padding: 0.875rem 1rem;
+  border-bottom: 1px solid rgba(15, 23, 42, 0.08);
+}
+
+.admin-table tbody tr:hover {
+  background: rgba(92, 45, 213, 0.04);
+}
+
+.admin-table tbody tr:last-child td {
+  border-bottom: none;
+}
+
+.admin-table a {
+  color: var(--primary);
+  text-decoration: none;
+  font-weight: 500;
+}
+
+.admin-table a:hover {
+  text-decoration: underline;
+}
+
+.empty-cell {
+  text-align: center;
+  color: var(--text-muted);
+  padding: 2rem !important;
+}
+
+.status-badge {
+  display: inline-block;
+  padding: 0.25rem 0.75rem;
+  border-radius: var(--radius-full);
+  font-size: 0.8rem;
+  font-weight: 600;
+  text-transform: capitalize;
+}
+
+.status-badge.pending {
+  background: rgba(250, 204, 21, 0.2);
+  color: #b45309;
+}
+
+.status-badge.approved {
+  background: rgba(16, 185, 129, 0.15);
+  color: #0f9f63;
+}
+
+.status-badge.rejected {
+  background: rgba(239, 68, 68, 0.18);
+  color: #b91c1c;
+}
+
+@media (max-width: 768px) {
+  .admin-summary {
+    grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+  }
+
+  .summary-card {
+    flex-direction: column;
+    text-align: center;
+  }
+
+  .admin-table {
+    font-size: 0.85rem;
+  }
+
+  .admin-table th,
+  .admin-table td {
+    padding: 0.75rem 0.5rem;
+  }
+}
+</style>
+
+<%- include('partials/footer') %>

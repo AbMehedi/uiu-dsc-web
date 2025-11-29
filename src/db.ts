@@ -110,6 +110,16 @@ export async function initializeDatabase(): Promise<void> {
       )
     `);
 
+    // Add interests column if it doesn't exist (migration)
+    try {
+      await runQuery(`ALTER TABLE members ADD COLUMN interests TEXT`);
+    } catch (error: any) {
+      // Column already exists, ignore error
+      if (!error.message.includes('duplicate column name')) {
+        console.error('Migration error:', error);
+      }
+    }
+
     console.log('Database tables initialized successfully');
     
     // Seed data if tables are empty
@@ -260,6 +270,10 @@ export async function addMember(member: Omit<Member, 'id' | 'createdAt' | 'statu
     'INSERT INTO members (name, email, studentId, department, semester, phone, interests, status, createdAt) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)',
     [member.name, member.email, member.studentId, member.department, member.semester, member.phone || null, member.interests || null, 'pending', createdAt]
   );
+}
+
+export function getDatabase() {
+  return db;
 }
 
 export function closeDatabase(): void {

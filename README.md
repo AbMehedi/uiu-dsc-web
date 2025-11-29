@@ -24,7 +24,7 @@ A full-stack clone of the UIU Data Science Club website built with Node.js, Type
    cd uiu-dsc-clone
    ```
 
-2. **Install dependencies** (already done if following the build process):
+2. **Install dependencies** :
    ```bash
    npm install
    ```
@@ -222,7 +222,7 @@ Built as an educational project to demonstrate:
 ## 📞 Contact
 
 For questions about this project:
-- Email: club@datascience.uiu.ac.bd (mock for educational purposes)
+- Email: abdmehedi@gmail.com
 
 ---
 

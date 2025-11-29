@@ -1,4 +1,5 @@
 import express, { Request, Response, NextFunction } from 'express';
+import session from 'express-session';
 import path from 'path';
 import {
   initializeDatabase,
@@ -9,16 +10,36 @@ import {
   getAllQuestions,
   addMember,
   getMemberByEmail,
+  getDatabase,
   closeDatabase
 } from './db';
 
+// Extend Express Session
+declare module 'express-session' {
+  interface SessionData {
+    isAdminLoggedIn?: boolean;
+  }
+}
+
 const app = express();
 const PORT = process.env.PORT || 3000;
+
+// Admin credentials (in production, use environment variables)
+const ADMIN_USERNAME = 'admin';
+const ADMIN_PASSWORD = 'admin123';
 
 // Middleware
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(express.static(path.join(__dirname, '../public')));
+
+// Session middleware
+app.use(session({
+  secret: 'uiu-dsc-secret-key-2025',
+  resave: false,
+  saveUninitialized: false,
+  cookie: { maxAge: 3600000 } // 1 hour
+}));
 
 // View engine setup
 app.set('view engine', 'ejs');
@@ -140,7 +161,16 @@ app.post('/join', async (req: Request, res: Response) => {
       });
     }
     
-    await addMember({ name, email, studentId, department, semester, phone, interests });
+    // Convert empty strings to undefined for optional fields
+    await addMember({ 
+      name, 
+      email, 
+      studentId, 
+      department, 
+      semester, 
+      phone: phone?.trim() || undefined, 
+      interests: interests?.trim() || undefined 
+    });
     
     res.render('join', {
       title: 'Join Our Club',
@@ -152,6 +182,92 @@ app.post('/join', async (req: Request, res: Response) => {
       title: 'Join Our Club',
       message: { type: 'error', text: 'An error occurred. Please try again.' }
     });
+  }
+});
+
+// Admin Login page (GET)
+app.get('/admin/login', (req: Request, res: Response) => {
+  if (req.session.isAdminLoggedIn) {
+    return res.redirect('/admin');
+  }
+  res.render('admin-login', {
+    title: 'Admin Login',
+    error: null
+  });
+});
+
+// Admin Login (POST)
+app.post('/admin/login', (req: Request, res: Response) => {
+  const { username, password } = req.body;
+  
+  // Trim whitespace from inputs
+  const trimmedUsername = username?.trim();
+  const trimmedPassword = password?.trim();
+  
+  if (trimmedUsername === ADMIN_USERNAME && trimmedPassword === ADMIN_PASSWORD) {
+    req.session.isAdminLoggedIn = true;
+    return res.redirect('/admin');
+  }
+  
+  res.render('admin-login', {
+    title: 'Admin Login',
+    error: 'Invalid username or password'
+  });
+});
+
+// Admin Logout
+app.get('/admin/logout', (req: Request, res: Response) => {
+  req.session.destroy((err) => {
+    if (err) {
+      console.error('Error destroying session:', err);
+    }
+    res.redirect('/admin/login');
+  });
+});
+
+// Admin Panel page (Protected)
+app.get('/admin', async (req: Request, res: Response) => {
+  // Check if admin is logged in
+  if (!req.session.isAdminLoggedIn) {
+    return res.redirect('/admin/login');
+  }
+  
+  try {
+    const events = await getAllEvents();
+    const team = await getAllTeamMembers();
+    const partners = await getAllPartners();
+    const questions = await getAllQuestions();
+    
+    // Get all members from database (handle both old and new schema)
+    const db = getDatabase();
+    const members = await new Promise<any[]>((resolve, reject) => {
+      db.all('SELECT * FROM members', [], (err: Error, rows: any[]) => {
+        if (err) reject(err);
+        else {
+          // Sort by createdAt if it exists, otherwise by id
+          const sortedRows = rows.sort((a: any, b: any) => {
+            if (a.createdAt && b.createdAt) {
+              return new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime();
+            }
+            return (b.id || 0) - (a.id || 0);
+          });
+          resolve(sortedRows);
+        }
+      });
+    });
+    
+    res.render('admin', {
+      title: 'Admin Panel',
+      events,
+      team,
+      partners,
+      questions,
+      members
+    });
+  } catch (error) {
+    console.error('Error loading admin panel:', error);
+    console.error('Stack trace:', error instanceof Error ? error.stack : 'No stack trace');
+    res.status(500).send(`Error loading admin panel: ${error instanceof Error ? error.message : 'Unknown error'}`);
   }
 });
 
