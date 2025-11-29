@@ -72,6 +72,7 @@
               <th>Time</th>
               <th>Location</th>
               <th>Seats</th>
+              <th>Status</th>
               <th>Actions</th>
             </tr>
           </thead>
@@ -86,6 +87,25 @@
                   <td><%= event.location %></td>
                   <td><%= event.seats %></td>
                   <td>
+                    <% 
+                    const statusEmojis = {
+                      upcoming: '🟢',
+                      ongoing: '🟡',
+                      completed: '🔵',
+                      cancelled: '🔴'
+                    };
+                    const statusColors = {
+                      upcoming: 'status-upcoming',
+                      ongoing: 'status-ongoing',
+                      completed: 'status-completed',
+                      cancelled: 'status-cancelled'
+                    };
+                    %>
+                    <span class="status-badge <%= statusColors[event.status] || 'status-upcoming' %>">
+                      <%= statusEmojis[event.status] || '🟢' %> <%= (event.status || 'upcoming').charAt(0).toUpperCase() + (event.status || 'upcoming').slice(1) %>
+                    </span>
+                  </td>
+                  <td>
                     <div class="action-buttons">
                       <a href="/admin/events/edit/<%= event.id %>" class="btn-edit">Edit</a>
                       <form action="/admin/events/delete/<%= event.id %>" method="POST" style="display: inline;" onsubmit="return confirm('Delete this event?');">
@@ -97,7 +117,7 @@
               <% }); %>
             <% } else { %>
               <tr>
-                <td colspan="7" class="empty-cell">No events found</td>
+                <td colspan="8" class="empty-cell">No events found</td>
               </tr>
             <% } %>
           </tbody>
@@ -429,6 +449,26 @@
 }
 
 .status-badge.rejected {
+  background: rgba(239, 68, 68, 0.18);
+  color: #b91c1c;
+}
+
+.status-badge.status-upcoming {
+  background: rgba(16, 185, 129, 0.15);
+  color: #0f9f63;
+}
+
+.status-badge.status-ongoing {
+  background: rgba(250, 204, 21, 0.2);
+  color: #b45309;
+}
+
+.status-badge.status-completed {
+  background: rgba(59, 130, 246, 0.15);
+  color: #1e40af;
+}
+
+.status-badge.status-cancelled {
   background: rgba(239, 68, 68, 0.18);
   color: #b91c1c;
 }

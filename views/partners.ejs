@@ -13,19 +13,26 @@
     <div class="partners-grid">
       <% partners.forEach((partner, index) => { %>
       <div class="card partner-card fade-in stagger-<%= (index % 6) + 1 %>">
-        <% if (partner.logo) { %>
-        <img src="<%= partner.logo %>" alt="<%= partner.name %>" class="partner-logo">
-        <% } else { %>
-        <div style="width: 80px; height: 80px; background: var(--gradient-primary); border-radius: var(--radius-lg); display: flex; align-items: center; justify-content: center; font-size: 2rem; margin-bottom: 1.5rem;">🤝</div>
-        <% } %>
+        <div class="partner-logo-container">
+          <% if (partner.logoUrl) { %>
+            <img 
+              src="<%= partner.logoUrl %>" 
+              alt="<%= partner.name %>" 
+              class="partner-logo"
+              onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';"
+            >
+            <div class="partner-logo-placeholder" style="display: none;">🤝</div>
+          <% } else { %>
+            <div class="partner-logo-placeholder">🤝</div>
+          <% } %>
+        </div>
         <h3 class="partner-name"><%= partner.name %></h3>
-        <p class="partner-type"><%= partner.type %></p>
         <p class="card-text" style="margin-top: 1rem; text-align: center;"><%= partner.description %></p>
         <% if (partner.benefits) { %>
         <p style="margin-top: 1rem; font-size: 0.85rem; color: var(--light-dim);"><strong style="color: var(--primary-light);">Benefits:</strong> <%= partner.benefits %></p>
         <% } %>
-        <% if (partner.website) { %>
-        <a href="<%= partner.website %>" target="_blank" class="btn btn-secondary" style="margin-top: 1.5rem; padding: 0.625rem 1.25rem; font-size: 0.875rem;">Visit Website</a>
+        <% if (partner.websiteUrl) { %>
+        <a href="<%= partner.websiteUrl %>" target="_blank" class="btn btn-secondary" style="margin-top: 1.5rem; padding: 0.625rem 1.25rem; font-size: 0.875rem;">Visit Website</a>
         <% } %>
       </div>
       <% }); %>

@@ -10,7 +10,29 @@
 <section class="section">
   <div class="container">
     <div class="form-card">
-      <form action="<%= action %>" method="POST" class="admin-form">
+      <form action="<%= action %>" method="POST" class="admin-form" enctype="multipart/form-data">
+        
+        <!-- Image Upload Field -->
+        <div class="form-group">
+          <label for="image">Event Image</label>
+          <% if (event && event.imageUrl) { %>
+            <div class="current-image">
+              <img src="<%= event.imageUrl %>" alt="Current event image" style="max-width: 200px; border-radius: var(--radius-md); margin-bottom: 1rem; box-shadow: 0 2px 8px rgba(0,0,0,0.1);">
+              <p style="font-size: 0.875rem; color: var(--text-light);">Upload a new image to replace the current one</p>
+            </div>
+          <% } %>
+          <input 
+            type="file" 
+            id="image" 
+            name="image" 
+            accept="image/jpeg,image/jpg,image/png,image/gif,image/webp"
+            class="file-input"
+          >
+          <small style="color: var(--text-light); font-size: 0.875rem; margin-top: 0.25rem; display: block;">
+            Accepted formats: JPG, PNG, GIF, WebP (Max 5MB)
+          </small>
+        </div>
+
         <div class="form-group">
           <label for="title">Event Title *</label>
           <input 
@@ -77,6 +99,24 @@
               min="1"
             >
           </div>
+        </div>
+
+        <div class="form-group">
+          <label for="status">Event Status *</label>
+          <select 
+            id="status" 
+            name="status" 
+            class="form-input"
+            required
+          >
+            <option value="upcoming" <%= event && event.status === 'upcoming' ? 'selected' : (!event ? 'selected' : '') %>>🟢 Upcoming</option>
+            <option value="ongoing" <%= event && event.status === 'ongoing' ? 'selected' : '' %>>🟡 Ongoing</option>
+            <option value="completed" <%= event && event.status === 'completed' ? 'selected' : '' %>>🔵 Completed</option>
+            <option value="cancelled" <%= event && event.status === 'cancelled' ? 'selected' : '' %>>🔴 Cancelled</option>
+          </select>
+          <small style="color: var(--text-light); font-size: 0.875rem; margin-top: 0.25rem; display: block;">
+            Set the current status of this event
+          </small>
         </div>
 
         <div class="form-group">
@@ -187,6 +227,29 @@
 
 .btn-secondary:hover {
   background: #4b5563;
+}
+
+.file-input {
+  padding: 0.75rem;
+  border: 2px dashed rgba(59, 130, 246, 0.3);
+  border-radius: var(--radius-md);
+  font-size: 1rem;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  background: rgba(59, 130, 246, 0.02);
+}
+
+.file-input:hover {
+  border-color: #3b82f6;
+  background: rgba(59, 130, 246, 0.05);
+}
+
+.current-image {
+  margin-bottom: 0.5rem;
+}
+
+.current-image img {
+  display: block;
 }
 
 @media (max-width: 768px) {

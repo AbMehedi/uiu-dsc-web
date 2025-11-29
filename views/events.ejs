@@ -18,10 +18,29 @@
     <div class="events-grid">
       <% upcomingEvents.forEach((event, index) => { %>
       <div class="card event-card fade-in stagger-<%= (index % 6) + 1 %>">
-        <span class="event-status upcoming">Upcoming</span>
-        <div style="background: var(--gradient-primary); height: 180px; display: flex; align-items: center; justify-content: center;">
-          <svg xmlns="http://www.w3.org/2000/svg" width="80" height="80" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1" stroke-linecap="round" stroke-linejoin="round" style="opacity: 0.4;"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect><line x1="16" y1="2" x2="16" y2="6"></line><line x1="8" y1="2" x2="8" y2="6"></line><line x1="3" y1="10" x2="21" y2="10"></line></svg>
-        </div>
+        <% 
+        const statusLabels = {
+          upcoming: 'Upcoming',
+          ongoing: 'Ongoing',
+          completed: 'Completed',
+          cancelled: 'Cancelled'
+        };
+        %>
+        <span class="event-status <%= event.status || 'upcoming' %>"><%= statusLabels[event.status] || 'Upcoming' %></span>
+        <% if (event.imageUrl) { %>
+          <div style="height: 200px; overflow: hidden; position: relative; background: var(--gradient-primary);">
+            <img 
+              src="<%= event.imageUrl %>" 
+              alt="<%= event.title %>"
+              style="width: 100%; height: 100%; object-fit: cover; display: block;"
+              onerror="this.style.display='none'; this.parentElement.innerHTML='<div style=\'background: var(--gradient-primary); height: 200px; display: flex; align-items: center; justify-content: center;\'><svg xmlns=\'http://www.w3.org/2000/svg\' width=\'80\' height=\'80\' viewBox=\'0 0 24 24\' fill=\'none\' stroke=\'currentColor\' stroke-width=\'1\' stroke-linecap=\'round\' stroke-linejoin=\'round\' style=\'opacity: 0.4;\'><rect x=\'3\' y=\'4\' width=\'18\' height=\'18\' rx=\'2\' ry=\'2\'></rect><line x1=\'16\' y1=\'2\' x2=\'16\' y2=\'6\'></line><line x1=\'8\' y1=\'2\' x2=\'8\' y2=\'6\'></line><line x1=\'3\' y1=\'10\' x2=\'21\' y2=\'10\'></line></svg></div>';" 
+            >
+          </div>
+        <% } else { %>
+          <div style="background: var(--gradient-primary); height: 200px; display: flex; align-items: center; justify-content: center;">
+            <svg xmlns="http://www.w3.org/2000/svg" width="80" height="80" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1" stroke-linecap="round" stroke-linejoin="round" style="opacity: 0.4;"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect><line x1="16" y1="2" x2="16" y2="6"></line><line x1="8" y1="2" x2="8" y2="6"></line><line x1="3" y1="10" x2="21" y2="10"></line></svg>
+          </div>
+        <% } %>
         <div class="card-content">
           <div class="event-date">
             <span class="event-date-day"><%= new Date(event.date).getDate() %></span>
@@ -57,10 +76,29 @@
     <div class="events-grid">
       <% pastEvents.forEach((event, index) => { %>
       <div class="card event-card fade-in stagger-<%= (index % 6) + 1 %>">
-        <span class="event-status completed">Completed</span>
-        <div style="background: linear-gradient(135deg, var(--dark-lighter), var(--dark)); height: 180px; display: flex; align-items: center; justify-content: center;">
-          <svg xmlns="http://www.w3.org/2000/svg" width="80" height="80" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1" stroke-linecap="round" stroke-linejoin="round" style="opacity: 0.3;"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path><polyline points="22 4 12 14.01 9 11.01"></polyline></svg>
-        </div>
+        <% 
+        const pastStatusLabels = {
+          upcoming: 'Upcoming',
+          ongoing: 'Ongoing',
+          completed: 'Completed',
+          cancelled: 'Cancelled'
+        };
+        %>
+        <span class="event-status <%= event.status || 'completed' %>"><%= pastStatusLabels[event.status] || 'Completed' %></span>
+        <% if (event.imageUrl) { %>
+          <div style="height: 200px; overflow: hidden; position: relative; background: linear-gradient(135deg, var(--dark-lighter), var(--dark));">
+            <img 
+              src="<%= event.imageUrl %>" 
+              alt="<%= event.title %>"
+              style="width: 100%; height: 100%; object-fit: cover; filter: grayscale(30%); display: block;"
+              onerror="this.style.display='none'; this.parentElement.innerHTML='<div style=\'background: linear-gradient(135deg, var(--dark-lighter), var(--dark)); height: 200px; display: flex; align-items: center; justify-content: center;\'><svg xmlns=\'http://www.w3.org/2000/svg\' width=\'80\' height=\'80\' viewBox=\'0 0 24 24\' fill=\'none\' stroke=\'currentColor\' stroke-width=\'1\' stroke-linecap=\'round\' stroke-linejoin=\'round\' style=\'opacity: 0.3;\'><path d=\'M22 11.08V12a10 10 0 1 1-5.93-9.14\'></path><polyline points=\'22 4 12 14.01 9 11.01\'></polyline></svg></div>';" 
+            >
+          </div>
+        <% } else { %>
+          <div style="background: linear-gradient(135deg, var(--dark-lighter), var(--dark)); height: 200px; display: flex; align-items: center; justify-content: center;">
+            <svg xmlns="http://www.w3.org/2000/svg" width="80" height="80" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1" stroke-linecap="round" stroke-linejoin="round" style="opacity: 0.3;"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path><polyline points="22 4 12 14.01 9 11.01"></polyline></svg>
+          </div>
+        <% } %>
         <div class="card-content">
           <div class="event-date" style="background: var(--dark-lighter);">
             <span class="event-date-day"><%= new Date(event.date).getDate() %></span>

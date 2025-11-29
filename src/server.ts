@@ -1,6 +1,7 @@
 import express, { Request, Response, NextFunction } from 'express';
 import session from 'express-session';
 import path from 'path';
+import fs from 'fs';
 import {
   initializeDatabase,
   getAllEvents,
@@ -13,6 +14,7 @@ import {
   getDatabase,
   closeDatabase
 } from './db';
+import { upload, deleteImageFile } from './upload';
 
 // Extend Express Session
 declare module 'express-session' {
@@ -74,9 +76,7 @@ app.get('/events', async (req: Request, res: Response) => {
     const events = await getAllEvents();
     const upcomingEvents = await getUpcomingEvents();
     const pastEvents = events.filter(event => {
-      const eventDate = new Date(event.date);
-      const today = new Date();
-      return eventDate < today;
+      return event.status === 'completed' || event.status === 'cancelled';
     });
     
     res.render('events', {
@@ -271,16 +271,17 @@ app.get('/admin/events/add', requireAuth, (req: Request, res: Response) => {
 });
 
 // Add new event (POST)
-app.post('/admin/events/add', requireAuth, async (req: Request, res: Response) => {
+app.post('/admin/events/add', requireAuth, upload.single('image'), async (req: Request, res: Response) => {
   try {
-    const { title, date, time, location, seats, description } = req.body;
+    const { title, date, time, location, seats, description, status } = req.body;
+    const imageUrl = req.file ? `/images/events/${req.file.filename}` : null;
     const db = getDatabase();
     
     await new Promise((resolve, reject) => {
       db.run(
-        `INSERT INTO events (title, date, time, location, seats, description, imageUrl) 
-         VALUES (?, ?, ?, ?, ?, ?, ?)`,
-        [title, date, time, location, seats, description, '/images/events/default.jpg'],
+        `INSERT INTO events (title, date, time, location, seats, description, imageUrl, status) 
+         VALUES (?, ?, ?, ?, ?, ?, ?, ?)`,
+        [title, date, time, location, seats, description, imageUrl, status || 'upcoming'],
         (err: Error) => err ? reject(err) : resolve(null)
       );
     });
@@ -318,17 +319,36 @@ app.get('/admin/events/edit/:id', requireAuth, async (req: Request, res: Respons
 });
 
 // Edit event (POST)
-app.post('/admin/events/edit/:id', requireAuth, async (req: Request, res: Response) => {
+app.post('/admin/events/edit/:id', requireAuth, upload.single('image'), async (req: Request, res: Response) => {
   try {
-    const { title, date, time, location, seats, description } = req.body;
+    const { title, date, time, location, seats, description, status } = req.body;
     const db = getDatabase();
+    
+    // Get current event to check old image
+    const currentEvent = await new Promise<any>((resolve, reject) => {
+      db.get('SELECT imageUrl FROM events WHERE id = ?', [req.params.id], (err: Error, row: any) => {
+        err ? reject(err) : resolve(row);
+      });
+    });
+    
+    let imageUrl = currentEvent?.imageUrl;
+    
+    // If new image uploaded, use it and delete old one
+    if (req.file) {
+      imageUrl = `/images/events/${req.file.filename}`;
+      
+      // Delete old image file
+      if (currentEvent?.imageUrl) {
+        deleteImageFile(currentEvent.imageUrl);
+      }
+    }
     
     await new Promise((resolve, reject) => {
       db.run(
         `UPDATE events 
-         SET title = ?, date = ?, time = ?, location = ?, seats = ?, description = ?
+         SET title = ?, date = ?, time = ?, location = ?, seats = ?, description = ?, imageUrl = ?, status = ?
          WHERE id = ?`,
-        [title, date, time, location, seats, description, req.params.id],
+        [title, date, time, location, seats, description, imageUrl, status || 'upcoming', req.params.id],
         (err: Error) => err ? reject(err) : resolve(null)
       );
     });
@@ -344,6 +364,19 @@ app.post('/admin/events/edit/:id', requireAuth, async (req: Request, res: Respon
 app.post('/admin/events/delete/:id', requireAuth, async (req: Request, res: Response) => {
   try {
     const db = getDatabase();
+    
+    // Get event to delete its image
+    const event = await new Promise<any>((resolve, reject) => {
+      db.get('SELECT imageUrl FROM events WHERE id = ?', [req.params.id], (err: Error, row: any) => {
+        err ? reject(err) : resolve(row);
+      });
+    });
+    
+    // Delete image file
+    if (event?.imageUrl) {
+      deleteImageFile(event.imageUrl);
+    }
+    
     await new Promise((resolve, reject) => {
       db.run('DELETE FROM events WHERE id = ?', [req.params.id], (err: Error) => {
         err ? reject(err) : resolve(null);
@@ -369,16 +402,17 @@ app.get('/admin/team/add', requireAuth, (req: Request, res: Response) => {
 });
 
 // Add team member (POST)
-app.post('/admin/team/add', requireAuth, async (req: Request, res: Response) => {
+app.post('/admin/team/add', requireAuth, upload.single('image'), async (req: Request, res: Response) => {
   try {
     const { name, role, category, email } = req.body;
+    const imageUrl = req.file ? `/images/team/${req.file.filename}` : null;
     const db = getDatabase();
     
     await new Promise((resolve, reject) => {
       db.run(
         `INSERT INTO team_members (name, role, category, email, imageUrl) 
          VALUES (?, ?, ?, ?, ?)`,
-        [name, role, category, email, '/images/team/default.jpg'],
+        [name, role, category, email, imageUrl],
         (err: Error) => err ? reject(err) : resolve(null)
       );
     });
@@ -416,17 +450,36 @@ app.get('/admin/team/edit/:id', requireAuth, async (req: Request, res: Response)
 });
 
 // Edit team member (POST)
-app.post('/admin/team/edit/:id', requireAuth, async (req: Request, res: Response) => {
+app.post('/admin/team/edit/:id', requireAuth, upload.single('image'), async (req: Request, res: Response) => {
   try {
     const { name, role, category, email } = req.body;
     const db = getDatabase();
     
+    // Get current member to check old image
+    const currentMember = await new Promise<any>((resolve, reject) => {
+      db.get('SELECT imageUrl FROM team_members WHERE id = ?', [req.params.id], (err: Error, row: any) => {
+        err ? reject(err) : resolve(row);
+      });
+    });
+    
+    let imageUrl = currentMember?.imageUrl;
+    
+    // If new image uploaded, use it and delete old one
+    if (req.file) {
+      imageUrl = `/images/team/${req.file.filename}`;
+      
+      // Delete old image file
+      if (currentMember?.imageUrl) {
+        deleteImageFile(currentMember.imageUrl);
+      }
+    }
+    
     await new Promise((resolve, reject) => {
       db.run(
         `UPDATE team_members 
-         SET name = ?, role = ?, category = ?, email = ?
+         SET name = ?, role = ?, category = ?, email = ?, imageUrl = ?
          WHERE id = ?`,
-        [name, role, category, email, req.params.id],
+        [name, role, category, email, imageUrl, req.params.id],
         (err: Error) => err ? reject(err) : resolve(null)
       );
     });
@@ -442,6 +495,19 @@ app.post('/admin/team/edit/:id', requireAuth, async (req: Request, res: Response
 app.post('/admin/team/delete/:id', requireAuth, async (req: Request, res: Response) => {
   try {
     const db = getDatabase();
+    
+    // Get member to delete their image
+    const member = await new Promise<any>((resolve, reject) => {
+      db.get('SELECT imageUrl FROM team_members WHERE id = ?', [req.params.id], (err: Error, row: any) => {
+        err ? reject(err) : resolve(row);
+      });
+    });
+    
+    // Delete image file
+    if (member?.imageUrl) {
+      deleteImageFile(member.imageUrl);
+    }
+    
     await new Promise((resolve, reject) => {
       db.run('DELETE FROM team_members WHERE id = ?', [req.params.id], (err: Error) => {
         err ? reject(err) : resolve(null);
@@ -467,16 +533,17 @@ app.get('/admin/partners/add', requireAuth, (req: Request, res: Response) => {
 });
 
 // Add partner (POST)
-app.post('/admin/partners/add', requireAuth, async (req: Request, res: Response) => {
+app.post('/admin/partners/add', requireAuth, upload.single('logo'), async (req: Request, res: Response) => {
   try {
     const { name, description, benefits, websiteUrl } = req.body;
+    const logoUrl = req.file ? `/images/partners/${req.file.filename}` : null;
     const db = getDatabase();
     
     await new Promise((resolve, reject) => {
       db.run(
         `INSERT INTO partners (name, description, benefits, websiteUrl, logoUrl) 
          VALUES (?, ?, ?, ?, ?)`,
-        [name, description, benefits, websiteUrl, '/images/partners/default.png'],
+        [name, description, benefits, websiteUrl, logoUrl],
         (err: Error) => err ? reject(err) : resolve(null)
       );
     });
@@ -514,17 +581,36 @@ app.get('/admin/partners/edit/:id', requireAuth, async (req: Request, res: Respo
 });
 
 // Edit partner (POST)
-app.post('/admin/partners/edit/:id', requireAuth, async (req: Request, res: Response) => {
+app.post('/admin/partners/edit/:id', requireAuth, upload.single('logo'), async (req: Request, res: Response) => {
   try {
     const { name, description, benefits, websiteUrl } = req.body;
     const db = getDatabase();
     
+    // Get current partner to check old logo
+    const currentPartner = await new Promise<any>((resolve, reject) => {
+      db.get('SELECT logoUrl FROM partners WHERE id = ?', [req.params.id], (err: Error, row: any) => {
+        err ? reject(err) : resolve(row);
+      });
+    });
+    
+    let logoUrl = currentPartner?.logoUrl;
+    
+    // If new logo uploaded, use it and delete old one
+    if (req.file) {
+      logoUrl = `/images/partners/${req.file.filename}`;
+      
+      // Delete old logo file
+      if (currentPartner?.logoUrl) {
+        deleteImageFile(currentPartner.logoUrl);
+      }
+    }
+    
     await new Promise((resolve, reject) => {
       db.run(
         `UPDATE partners 
-         SET name = ?, description = ?, benefits = ?, websiteUrl = ?
+         SET name = ?, description = ?, benefits = ?, websiteUrl = ?, logoUrl = ?
          WHERE id = ?`,
-        [name, description, benefits, websiteUrl, req.params.id],
+        [name, description, benefits, websiteUrl, logoUrl, req.params.id],
         (err: Error) => err ? reject(err) : resolve(null)
       );
     });
@@ -540,6 +626,19 @@ app.post('/admin/partners/edit/:id', requireAuth, async (req: Request, res: Resp
 app.post('/admin/partners/delete/:id', requireAuth, async (req: Request, res: Response) => {
   try {
     const db = getDatabase();
+    
+    // Get partner to delete their logo
+    const partner = await new Promise<any>((resolve, reject) => {
+      db.get('SELECT logoUrl FROM partners WHERE id = ?', [req.params.id], (err: Error, row: any) => {
+        err ? reject(err) : resolve(row);
+      });
+    });
+    
+    // Delete logo file
+    if (partner?.logoUrl) {
+      deleteImageFile(partner.logoUrl);
+    }
+    
     await new Promise((resolve, reject) => {
       db.run('DELETE FROM partners WHERE id = ?', [req.params.id], (err: Error) => {
         err ? reject(err) : resolve(null);

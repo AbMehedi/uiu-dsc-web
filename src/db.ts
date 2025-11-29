@@ -123,6 +123,40 @@ export async function initializeDatabase(): Promise<void> {
       }
     }
 
+    // Add imageUrl columns if they don't exist (migration)
+    try {
+      await runQuery(`ALTER TABLE events ADD COLUMN imageUrl TEXT`);
+    } catch (error: any) {
+      if (!error.message.includes('duplicate column name')) {
+        console.error('Migration error:', error);
+      }
+    }
+
+    // Add status column to events if it doesn't exist (migration)
+    try {
+      await runQuery(`ALTER TABLE events ADD COLUMN status TEXT DEFAULT 'upcoming'`);
+    } catch (error: any) {
+      if (!error.message.includes('duplicate column name')) {
+        console.error('Migration error:', error);
+      }
+    }
+
+    try {
+      await runQuery(`ALTER TABLE team_members ADD COLUMN imageUrl TEXT`);
+    } catch (error: any) {
+      if (!error.message.includes('duplicate column name')) {
+        console.error('Migration error:', error);
+      }
+    }
+
+    try {
+      await runQuery(`ALTER TABLE partners ADD COLUMN logoUrl TEXT`);
+    } catch (error: any) {
+      if (!error.message.includes('duplicate column name')) {
+        console.error('Migration error:', error);
+      }
+    }
+
     console.log('Database tables initialized successfully');
     
     // Seed data if tables are empty
@@ -186,10 +220,9 @@ export async function getAllEvents(): Promise<Event[]> {
 }
 
 export async function getUpcomingEvents(): Promise<Event[]> {
-  const today = new Date().toISOString().split('T')[0];
   return getAllQuery<Event>(
-    'SELECT * FROM events WHERE date >= ? ORDER BY date ASC',
-    [today]
+    'SELECT * FROM events WHERE status IN (?, ?) ORDER BY date ASC',
+    ['upcoming', 'ongoing']
   );
 }
 
@@ -199,8 +232,8 @@ export async function getEventById(id: number): Promise<Event | undefined> {
 
 export async function addEvent(event: Omit<Event, 'id'>): Promise<void> {
   await runQuery(
-    'INSERT INTO events (title, date, time, location, seats, description, imageUrl) VALUES (?, ?, ?, ?, ?, ?, ?)',
-    [event.title, event.date, event.time, event.location, event.seats, event.description, event.imageUrl || null]
+    'INSERT INTO events (title, date, time, location, seats, description, imageUrl, status) VALUES (?, ?, ?, ?, ?, ?, ?, ?)',
+    [event.title, event.date, event.time, event.location, event.seats, event.description, event.imageUrl || null, event.status || 'upcoming']
   );
 }
 

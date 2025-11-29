@@ -9,6 +9,7 @@ export interface Event {
   seats: number;
   description: string;
   imageUrl?: string;
+  status: 'upcoming' | 'ongoing' | 'completed' | 'cancelled';
 }
 
 export interface TeamMember {
