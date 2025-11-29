@@ -58,7 +58,10 @@
 
     <!-- Events Table -->
     <div class="admin-section">
-      <h2 class="admin-section-title">📅 Events</h2>
+      <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1rem;">
+        <h2 class="admin-section-title" style="margin-bottom: 0; border-bottom: none;">📅 Events</h2>
+        <a href="/admin/events/add" class="btn btn-primary btn-sm">+ Add Event</a>
+      </div>
       <div class="table-wrapper">
         <table class="admin-table">
           <thead>
@@ -69,6 +72,7 @@
               <th>Time</th>
               <th>Location</th>
               <th>Seats</th>
+              <th>Actions</th>
             </tr>
           </thead>
           <tbody>
@@ -81,11 +85,19 @@
                   <td><%= event.time %></td>
                   <td><%= event.location %></td>
                   <td><%= event.seats %></td>
+                  <td>
+                    <div class="action-buttons">
+                      <a href="/admin/events/edit/<%= event.id %>" class="btn-edit">Edit</a>
+                      <form action="/admin/events/delete/<%= event.id %>" method="POST" style="display: inline;" onsubmit="return confirm('Delete this event?');">
+                        <button type="submit" class="btn-delete">Delete</button>
+                      </form>
+                    </div>
+                  </td>
                 </tr>
               <% }); %>
             <% } else { %>
               <tr>
-                <td colspan="6" class="empty-cell">No events found</td>
+                <td colspan="7" class="empty-cell">No events found</td>
               </tr>
             <% } %>
           </tbody>
@@ -95,7 +107,10 @@
 
     <!-- Team Members Table -->
     <div class="admin-section">
-      <h2 class="admin-section-title">👥 Team Members</h2>
+      <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1rem;">
+        <h2 class="admin-section-title" style="margin-bottom: 0; border-bottom: none;">👥 Team Members</h2>
+        <a href="/admin/team/add" class="btn btn-primary btn-sm">+ Add Team Member</a>
+      </div>
       <div class="table-wrapper">
         <table class="admin-table">
           <thead>
@@ -105,6 +120,7 @@
               <th>Role</th>
               <th>Category</th>
               <th>Email</th>
+              <th>Actions</th>
             </tr>
           </thead>
           <tbody>
@@ -116,11 +132,19 @@
                   <td><%= member.role %></td>
                   <td><%= member.category %></td>
                   <td><a href="mailto:<%= member.email %>"><%= member.email %></a></td>
+                  <td>
+                    <div class="action-buttons">
+                      <a href="/admin/team/edit/<%= member.id %>" class="btn-edit">Edit</a>
+                      <form action="/admin/team/delete/<%= member.id %>" method="POST" style="display: inline;" onsubmit="return confirm('Delete this team member?');">
+                        <button type="submit" class="btn-delete">Delete</button>
+                      </form>
+                    </div>
+                  </td>
                 </tr>
               <% }); %>
             <% } else { %>
               <tr>
-                <td colspan="5" class="empty-cell">No team members found</td>
+                <td colspan="6" class="empty-cell">No team members found</td>
               </tr>
             <% } %>
           </tbody>
@@ -130,7 +154,10 @@
 
     <!-- Partners Table -->
     <div class="admin-section">
-      <h2 class="admin-section-title">🤝 Partners</h2>
+      <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1rem;">
+        <h2 class="admin-section-title" style="margin-bottom: 0; border-bottom: none;">🤝 Partners</h2>
+        <a href="/admin/partners/add" class="btn btn-primary btn-sm">+ Add Partner</a>
+      </div>
       <div class="table-wrapper">
         <table class="admin-table">
           <thead>
@@ -139,6 +166,7 @@
               <th>Name</th>
               <th>Description</th>
               <th>Website</th>
+              <th>Actions</th>
             </tr>
           </thead>
           <tbody>
@@ -155,11 +183,19 @@
                       -
                     <% } %>
                   </td>
+                  <td>
+                    <div class="action-buttons">
+                      <a href="/admin/partners/edit/<%= partner.id %>" class="btn-edit">Edit</a>
+                      <form action="/admin/partners/delete/<%= partner.id %>" method="POST" style="display: inline;" onsubmit="return confirm('Delete this partner?');">
+                        <button type="submit" class="btn-delete">Delete</button>
+                      </form>
+                    </div>
+                  </td>
                 </tr>
               <% }); %>
             <% } else { %>
               <tr>
-                <td colspan="4" class="empty-cell">No partners found</td>
+                <td colspan="5" class="empty-cell">No partners found</td>
               </tr>
             <% } %>
           </tbody>
@@ -169,7 +205,10 @@
 
     <!-- Questions Table -->
     <div class="admin-section">
-      <h2 class="admin-section-title">📚 Questions Bank</h2>
+      <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1rem;">
+        <h2 class="admin-section-title" style="margin-bottom: 0; border-bottom: none;">📚 Questions Bank</h2>
+        <a href="/admin/questions/add" class="btn btn-primary btn-sm">+ Add Question</a>
+      </div>
       <div class="table-wrapper">
         <table class="admin-table">
           <thead>
@@ -179,6 +218,7 @@
               <th>Subcategory</th>
               <th>Title</th>
               <th>Link</th>
+              <th>Actions</th>
             </tr>
           </thead>
           <tbody>
@@ -190,11 +230,19 @@
                   <td><%= question.subcategory %></td>
                   <td><%= question.title %></td>
                   <td><a href="<%= question.link %>" target="_blank">Open</a></td>
+                  <td>
+                    <div class="action-buttons">
+                      <a href="/admin/questions/edit/<%= question.id %>" class="btn-edit">Edit</a>
+                      <form action="/admin/questions/delete/<%= question.id %>" method="POST" style="display: inline;" onsubmit="return confirm('Delete this question?');">
+                        <button type="submit" class="btn-delete">Delete</button>
+                      </form>
+                    </div>
+                  </td>
                 </tr>
               <% }); %>
             <% } else { %>
               <tr>
-                <td colspan="5" class="empty-cell">No questions found</td>
+                <td colspan="6" class="empty-cell">No questions found</td>
               </tr>
             <% } %>
           </tbody>
@@ -230,9 +278,13 @@
                   <td><%= member.department %></td>
                   <td><%= member.semester %></td>
                   <td>
-                    <span class="status-badge <%= member.status %>">
-                      <%= member.status %>
-                    </span>
+                    <form action="/admin/members/update/<%= member.id %>" method="POST" style="display: inline;">
+                      <select name="status" class="status-select <%= member.status %>" onchange="this.form.submit()">
+                        <option value="pending" <%= member.status === 'pending' ? 'selected' : '' %>>Pending</option>
+                        <option value="approved" <%= member.status === 'approved' ? 'selected' : '' %>>Approved</option>
+                        <option value="rejected" <%= member.status === 'rejected' ? 'selected' : '' %>>Rejected</option>
+                      </select>
+                    </form>
                   </td>
                   <td><%= member.createdAt ? new Date(member.createdAt).toLocaleDateString() : 'N/A' %></td>
                 </tr>
@@ -379,6 +431,86 @@
 .status-badge.rejected {
   background: rgba(239, 68, 68, 0.18);
   color: #b91c1c;
+}
+
+.btn-sm {
+  padding: 0.5rem 1rem;
+  font-size: 0.875rem;
+}
+
+.action-buttons {
+  display: flex;
+  gap: 0.5rem;
+  align-items: center;
+}
+
+.btn-edit {
+  background: #3b82f6;
+  color: white;
+  border: none;
+  padding: 0.4rem 0.875rem;
+  border-radius: var(--radius-md);
+  font-size: 0.8rem;
+  font-weight: 500;
+  cursor: pointer;
+  text-decoration: none;
+  display: inline-block;
+  transition: all 0.3s ease;
+}
+
+.btn-edit:hover {
+  background: #2563eb;
+  transform: translateY(-2px);
+}
+
+.btn-delete {
+  background: #ef4444;
+  color: white;
+  border: none;
+  padding: 0.4rem 0.875rem;
+  border-radius: var(--radius-md);
+  font-size: 0.8rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.btn-delete:hover {
+  background: #dc2626;
+  transform: translateY(-2px);
+}
+
+.status-select {
+  padding: 0.5rem 0.75rem;
+  border: 2px solid;
+  border-radius: var(--radius-md);
+  font-size: 0.8rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  text-transform: capitalize;
+}
+
+.status-select.pending {
+  background: rgba(250, 204, 21, 0.2);
+  color: #b45309;
+  border-color: #facc15;
+}
+
+.status-select.approved {
+  background: rgba(16, 185, 129, 0.15);
+  color: #0f9f63;
+  border-color: #10b981;
+}
+
+.status-select.rejected {
+  background: rgba(239, 68, 68, 0.18);
+  color: #b91c1c;
+  border-color: #ef4444;
+}
+
+.status-select:hover {
+  opacity: 0.8;
 }
 
 @media (max-width: 768px) {

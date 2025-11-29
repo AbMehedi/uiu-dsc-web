@@ -38,7 +38,11 @@ app.use(session({
   secret: 'uiu-dsc-secret-key-2025',
   resave: false,
   saveUninitialized: false,
-  cookie: { maxAge: 3600000 } // 1 hour
+  cookie: { 
+    maxAge: 3600000, // 1 hour
+    httpOnly: true,
+    sameSite: 'lax'
+  }
 }));
 
 // View engine setup
@@ -200,15 +204,37 @@ app.get('/admin/login', (req: Request, res: Response) => {
 app.post('/admin/login', (req: Request, res: Response) => {
   const { username, password } = req.body;
   
+  console.log('Login attempt:', { username, password: password ? '***' : 'empty' });
+  
   // Trim whitespace from inputs
   const trimmedUsername = username?.trim();
   const trimmedPassword = password?.trim();
   
+  console.log('After trim:', { username: trimmedUsername, password: trimmedPassword ? '***' : 'empty' });
+  console.log('Expected:', { username: ADMIN_USERNAME, password: ADMIN_PASSWORD });
+  console.log('Match:', trimmedUsername === ADMIN_USERNAME && trimmedPassword === ADMIN_PASSWORD);
+  
   if (trimmedUsername === ADMIN_USERNAME && trimmedPassword === ADMIN_PASSWORD) {
     req.session.isAdminLoggedIn = true;
-    return res.redirect('/admin');
+    console.log('Login successful!');
+    console.log('Session after setting isAdminLoggedIn:', req.session);
+    // Save session before redirect
+    req.session.save((err) => {
+      if (err) {
+        console.error('Session save error:', err);
+        return res.render('admin-login', {
+          title: 'Admin Login',
+          error: 'Session error. Please try again.'
+        });
+      }
+      console.log('Session saved successfully');
+      console.log('Session after save:', req.session);
+      res.redirect('/admin');
+    });
+    return;
   }
   
+  console.log('Login failed');
   res.render('admin-login', {
     title: 'Admin Login',
     error: 'Invalid username or password'
@@ -225,13 +251,440 @@ app.get('/admin/logout', (req: Request, res: Response) => {
   });
 });
 
-// Admin Panel page (Protected)
-app.get('/admin', async (req: Request, res: Response) => {
-  // Check if admin is logged in
+// Middleware to check admin authentication
+const requireAuth = (req: Request, res: Response, next: NextFunction) => {
   if (!req.session.isAdminLoggedIn) {
     return res.redirect('/admin/login');
   }
+  next();
+};
+
+// ========== EVENT CRUD ROUTES ==========
+
+// Add new event (GET - show form)
+app.get('/admin/events/add', requireAuth, (req: Request, res: Response) => {
+  res.render('admin-event-form', {
+    title: 'Add Event',
+    event: null,
+    action: '/admin/events/add'
+  });
+});
+
+// Add new event (POST)
+app.post('/admin/events/add', requireAuth, async (req: Request, res: Response) => {
+  try {
+    const { title, date, time, location, seats, description } = req.body;
+    const db = getDatabase();
+    
+    await new Promise((resolve, reject) => {
+      db.run(
+        `INSERT INTO events (title, date, time, location, seats, description, imageUrl) 
+         VALUES (?, ?, ?, ?, ?, ?, ?)`,
+        [title, date, time, location, seats, description, '/images/events/default.jpg'],
+        (err: Error) => err ? reject(err) : resolve(null)
+      );
+    });
+    
+    res.redirect('/admin?success=event-added');
+  } catch (error) {
+    console.error('Error adding event:', error);
+    res.redirect('/admin?error=event-add-failed');
+  }
+});
+
+// Edit event (GET - show form)
+app.get('/admin/events/edit/:id', requireAuth, async (req: Request, res: Response) => {
+  try {
+    const db = getDatabase();
+    const event = await new Promise<any>((resolve, reject) => {
+      db.get('SELECT * FROM events WHERE id = ?', [req.params.id], (err: Error, row: any) => {
+        err ? reject(err) : resolve(row);
+      });
+    });
+    
+    if (!event) {
+      return res.redirect('/admin?error=event-not-found');
+    }
+    
+    res.render('admin-event-form', {
+      title: 'Edit Event',
+      event,
+      action: `/admin/events/edit/${event.id}`
+    });
+  } catch (error) {
+    console.error('Error loading event:', error);
+    res.redirect('/admin?error=event-load-failed');
+  }
+});
+
+// Edit event (POST)
+app.post('/admin/events/edit/:id', requireAuth, async (req: Request, res: Response) => {
+  try {
+    const { title, date, time, location, seats, description } = req.body;
+    const db = getDatabase();
+    
+    await new Promise((resolve, reject) => {
+      db.run(
+        `UPDATE events 
+         SET title = ?, date = ?, time = ?, location = ?, seats = ?, description = ?
+         WHERE id = ?`,
+        [title, date, time, location, seats, description, req.params.id],
+        (err: Error) => err ? reject(err) : resolve(null)
+      );
+    });
+    
+    res.redirect('/admin?success=event-updated');
+  } catch (error) {
+    console.error('Error updating event:', error);
+    res.redirect('/admin?error=event-update-failed');
+  }
+});
+
+// Delete event
+app.post('/admin/events/delete/:id', requireAuth, async (req: Request, res: Response) => {
+  try {
+    const db = getDatabase();
+    await new Promise((resolve, reject) => {
+      db.run('DELETE FROM events WHERE id = ?', [req.params.id], (err: Error) => {
+        err ? reject(err) : resolve(null);
+      });
+    });
+    
+    res.redirect('/admin?success=event-deleted');
+  } catch (error) {
+    console.error('Error deleting event:', error);
+    res.redirect('/admin?error=event-delete-failed');
+  }
+});
+
+// ========== TEAM MEMBER CRUD ROUTES ==========
+
+// Add team member (GET)
+app.get('/admin/team/add', requireAuth, (req: Request, res: Response) => {
+  res.render('admin-team-form', {
+    title: 'Add Team Member',
+    member: null,
+    action: '/admin/team/add'
+  });
+});
+
+// Add team member (POST)
+app.post('/admin/team/add', requireAuth, async (req: Request, res: Response) => {
+  try {
+    const { name, role, category, email } = req.body;
+    const db = getDatabase();
+    
+    await new Promise((resolve, reject) => {
+      db.run(
+        `INSERT INTO team_members (name, role, category, email, imageUrl) 
+         VALUES (?, ?, ?, ?, ?)`,
+        [name, role, category, email, '/images/team/default.jpg'],
+        (err: Error) => err ? reject(err) : resolve(null)
+      );
+    });
+    
+    res.redirect('/admin?success=team-added');
+  } catch (error) {
+    console.error('Error adding team member:', error);
+    res.redirect('/admin?error=team-add-failed');
+  }
+});
+
+// Edit team member (GET)
+app.get('/admin/team/edit/:id', requireAuth, async (req: Request, res: Response) => {
+  try {
+    const db = getDatabase();
+    const member = await new Promise<any>((resolve, reject) => {
+      db.get('SELECT * FROM team_members WHERE id = ?', [req.params.id], (err: Error, row: any) => {
+        err ? reject(err) : resolve(row);
+      });
+    });
+    
+    if (!member) {
+      return res.redirect('/admin?error=team-not-found');
+    }
+    
+    res.render('admin-team-form', {
+      title: 'Edit Team Member',
+      member,
+      action: `/admin/team/edit/${member.id}`
+    });
+  } catch (error) {
+    console.error('Error loading team member:', error);
+    res.redirect('/admin?error=team-load-failed');
+  }
+});
+
+// Edit team member (POST)
+app.post('/admin/team/edit/:id', requireAuth, async (req: Request, res: Response) => {
+  try {
+    const { name, role, category, email } = req.body;
+    const db = getDatabase();
+    
+    await new Promise((resolve, reject) => {
+      db.run(
+        `UPDATE team_members 
+         SET name = ?, role = ?, category = ?, email = ?
+         WHERE id = ?`,
+        [name, role, category, email, req.params.id],
+        (err: Error) => err ? reject(err) : resolve(null)
+      );
+    });
+    
+    res.redirect('/admin?success=team-updated');
+  } catch (error) {
+    console.error('Error updating team member:', error);
+    res.redirect('/admin?error=team-update-failed');
+  }
+});
+
+// Delete team member
+app.post('/admin/team/delete/:id', requireAuth, async (req: Request, res: Response) => {
+  try {
+    const db = getDatabase();
+    await new Promise((resolve, reject) => {
+      db.run('DELETE FROM team_members WHERE id = ?', [req.params.id], (err: Error) => {
+        err ? reject(err) : resolve(null);
+      });
+    });
+    
+    res.redirect('/admin?success=team-deleted');
+  } catch (error) {
+    console.error('Error deleting team member:', error);
+    res.redirect('/admin?error=team-delete-failed');
+  }
+});
+
+// ========== PARTNER CRUD ROUTES ==========
+
+// Add partner (GET)
+app.get('/admin/partners/add', requireAuth, (req: Request, res: Response) => {
+  res.render('admin-partner-form', {
+    title: 'Add Partner',
+    partner: null,
+    action: '/admin/partners/add'
+  });
+});
+
+// Add partner (POST)
+app.post('/admin/partners/add', requireAuth, async (req: Request, res: Response) => {
+  try {
+    const { name, description, benefits, websiteUrl } = req.body;
+    const db = getDatabase();
+    
+    await new Promise((resolve, reject) => {
+      db.run(
+        `INSERT INTO partners (name, description, benefits, websiteUrl, logoUrl) 
+         VALUES (?, ?, ?, ?, ?)`,
+        [name, description, benefits, websiteUrl, '/images/partners/default.png'],
+        (err: Error) => err ? reject(err) : resolve(null)
+      );
+    });
+    
+    res.redirect('/admin?success=partner-added');
+  } catch (error) {
+    console.error('Error adding partner:', error);
+    res.redirect('/admin?error=partner-add-failed');
+  }
+});
+
+// Edit partner (GET)
+app.get('/admin/partners/edit/:id', requireAuth, async (req: Request, res: Response) => {
+  try {
+    const db = getDatabase();
+    const partner = await new Promise<any>((resolve, reject) => {
+      db.get('SELECT * FROM partners WHERE id = ?', [req.params.id], (err: Error, row: any) => {
+        err ? reject(err) : resolve(row);
+      });
+    });
+    
+    if (!partner) {
+      return res.redirect('/admin?error=partner-not-found');
+    }
+    
+    res.render('admin-partner-form', {
+      title: 'Edit Partner',
+      partner,
+      action: `/admin/partners/edit/${partner.id}`
+    });
+  } catch (error) {
+    console.error('Error loading partner:', error);
+    res.redirect('/admin?error=partner-load-failed');
+  }
+});
+
+// Edit partner (POST)
+app.post('/admin/partners/edit/:id', requireAuth, async (req: Request, res: Response) => {
+  try {
+    const { name, description, benefits, websiteUrl } = req.body;
+    const db = getDatabase();
+    
+    await new Promise((resolve, reject) => {
+      db.run(
+        `UPDATE partners 
+         SET name = ?, description = ?, benefits = ?, websiteUrl = ?
+         WHERE id = ?`,
+        [name, description, benefits, websiteUrl, req.params.id],
+        (err: Error) => err ? reject(err) : resolve(null)
+      );
+    });
+    
+    res.redirect('/admin?success=partner-updated');
+  } catch (error) {
+    console.error('Error updating partner:', error);
+    res.redirect('/admin?error=partner-update-failed');
+  }
+});
+
+// Delete partner
+app.post('/admin/partners/delete/:id', requireAuth, async (req: Request, res: Response) => {
+  try {
+    const db = getDatabase();
+    await new Promise((resolve, reject) => {
+      db.run('DELETE FROM partners WHERE id = ?', [req.params.id], (err: Error) => {
+        err ? reject(err) : resolve(null);
+      });
+    });
+    
+    res.redirect('/admin?success=partner-deleted');
+  } catch (error) {
+    console.error('Error deleting partner:', error);
+    res.redirect('/admin?error=partner-delete-failed');
+  }
+});
+
+// ========== QUESTION CRUD ROUTES ==========
+
+// Add question (GET)
+app.get('/admin/questions/add', requireAuth, (req: Request, res: Response) => {
+  res.render('admin-question-form', {
+    title: 'Add Question',
+    question: null,
+    action: '/admin/questions/add'
+  });
+});
+
+// Add question (POST)
+app.post('/admin/questions/add', requireAuth, async (req: Request, res: Response) => {
+  try {
+    const { category, subcategory, title, link } = req.body;
+    const db = getDatabase();
+    
+    await new Promise((resolve, reject) => {
+      db.run(
+        `INSERT INTO questions (category, subcategory, title, link) 
+         VALUES (?, ?, ?, ?)`,
+        [category, subcategory, title, link],
+        (err: Error) => err ? reject(err) : resolve(null)
+      );
+    });
+    
+    res.redirect('/admin?success=question-added');
+  } catch (error) {
+    console.error('Error adding question:', error);
+    res.redirect('/admin?error=question-add-failed');
+  }
+});
+
+// Edit question (GET)
+app.get('/admin/questions/edit/:id', requireAuth, async (req: Request, res: Response) => {
+  try {
+    const db = getDatabase();
+    const question = await new Promise<any>((resolve, reject) => {
+      db.get('SELECT * FROM questions WHERE id = ?', [req.params.id], (err: Error, row: any) => {
+        err ? reject(err) : resolve(row);
+      });
+    });
+    
+    if (!question) {
+      return res.redirect('/admin?error=question-not-found');
+    }
+    
+    res.render('admin-question-form', {
+      title: 'Edit Question',
+      question,
+      action: `/admin/questions/edit/${question.id}`
+    });
+  } catch (error) {
+    console.error('Error loading question:', error);
+    res.redirect('/admin?error=question-load-failed');
+  }
+});
+
+// Edit question (POST)
+app.post('/admin/questions/edit/:id', requireAuth, async (req: Request, res: Response) => {
+  try {
+    const { category, subcategory, title, link } = req.body;
+    const db = getDatabase();
+    
+    await new Promise((resolve, reject) => {
+      db.run(
+        `UPDATE questions 
+         SET category = ?, subcategory = ?, title = ?, link = ?
+         WHERE id = ?`,
+        [category, subcategory, title, link, req.params.id],
+        (err: Error) => err ? reject(err) : resolve(null)
+      );
+    });
+    
+    res.redirect('/admin?success=question-updated');
+  } catch (error) {
+    console.error('Error updating question:', error);
+    res.redirect('/admin?error=question-update-failed');
+  }
+});
+
+// Delete question
+app.post('/admin/questions/delete/:id', requireAuth, async (req: Request, res: Response) => {
+  try {
+    const db = getDatabase();
+    await new Promise((resolve, reject) => {
+      db.run('DELETE FROM questions WHERE id = ?', [req.params.id], (err: Error) => {
+        err ? reject(err) : resolve(null);
+      });
+    });
+    
+    res.redirect('/admin?success=question-deleted');
+  } catch (error) {
+    console.error('Error deleting question:', error);
+    res.redirect('/admin?error=question-delete-failed');
+  }
+});
+
+// ========== MEMBER STATUS UPDATE ==========
+
+app.post('/admin/members/update/:id', requireAuth, async (req: Request, res: Response) => {
+  try {
+    const { status } = req.body;
+    const db = getDatabase();
+    
+    await new Promise((resolve, reject) => {
+      db.run(
+        'UPDATE members SET status = ? WHERE id = ?',
+        [status, req.params.id],
+        (err: Error) => err ? reject(err) : resolve(null)
+      );
+    });
+    
+    res.redirect('/admin?success=status-updated');
+  } catch (error) {
+    console.error('Error updating member status:', error);
+    res.redirect('/admin?error=status-update-failed');
+  }
+});
+
+// Admin Panel page (Protected)
+app.get('/admin', async (req: Request, res: Response) => {
+  console.log('Admin page accessed, session:', req.session);
+  console.log('Is admin logged in?', req.session.isAdminLoggedIn);
   
+  // Check if admin is logged in
+  if (!req.session.isAdminLoggedIn) {
+    console.log('Not logged in, redirecting to login');
+    return res.redirect('/admin/login');
+  }
+  
+  console.log('Admin is logged in, loading data...');
   try {
     const events = await getAllEvents();
     const team = await getAllTeamMembers();
@@ -393,9 +846,12 @@ async function startServer() {
   try {
     await initializeDatabase();
     
-    app.listen(PORT, () => {
-      console.log(`Server is running on http://localhost:${PORT}`);
-    });
+    // Only start server if not in serverless environment
+    if (!process.env.VERCEL) {
+      app.listen(PORT, () => {
+        console.log(`Server is running on http://localhost:${PORT}`);
+      });
+    }
   } catch (error) {
     console.error('Failed to start server:', error);
     process.exit(1);
@@ -415,4 +871,8 @@ process.on('SIGTERM', () => {
   process.exit(0);
 });
 
+// Initialize database on module load
 startServer();
+
+// Export for Vercel serverless functions
+export default app;

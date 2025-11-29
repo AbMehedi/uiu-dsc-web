@@ -3,7 +3,10 @@ import path from 'path';
 import fs from 'fs';
 import { Event, TeamMember, Partner, Question, Member } from './models/types';
 
-const DB_PATH = path.join(__dirname, '../database.db');
+// Use /tmp for serverless environments (Vercel, AWS Lambda)
+const DB_PATH = process.env.VERCEL 
+  ? '/tmp/database.db' 
+  : path.join(__dirname, '../database.db');
 
 // Create database connection
 const db = new sqlite3.Database(DB_PATH, (err) => {
